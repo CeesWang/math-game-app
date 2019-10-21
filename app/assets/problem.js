@@ -16,8 +16,6 @@ class Problem {
 
     generateProblem(min = 1, max = 11){
         this.generatePrimitives(min, max);
-        
-        let usedOps = [];
 
         this.solution = '';
 
