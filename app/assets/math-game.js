@@ -61,10 +61,11 @@ document.addEventListener("DOMContentLoaded", ()=> {
 
 
         if (event.target.id == 'submit'){
-            if (math.evaluate(answerDisplay.innerText) == problem.finalAnswer()){
+            let userAnswer = math.evaluate(answerDisplay.innerText);
+            if (userAnswer == problem.finalAnswer()){
                 alert('Correct!')
             } else {
-                alert('WROOOOOOONG')
+                alert(`WROOOOOOONG! Your Answer: ${userAnswer}`)
             }
         }
         

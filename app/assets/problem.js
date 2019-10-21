@@ -26,7 +26,7 @@ class Problem {
         this.primArray.sort((a,b) => a-b);
     }
 
-    generateProblem(min = 1, max = 11){
+    generateProblem(min = 1, max = 10){
         this.generatePrimitives(min, max);
 
         this.solution = '';
