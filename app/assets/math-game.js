@@ -3,38 +3,46 @@ document.addEventListener("DOMContentLoaded", ()=> {
     const gameBox = document.querySelector('#game-box');
     const answerDisplay = document.querySelector('#answer-display');
     let openParens = 0;
+ 
+    const submitButton = document.querySelector('#submit');
 
     problem.generateProblem();
     problem.renderProblem();
+    let open = document.querySelector('#open');
+    let close = document.querySelector('#close');
     document.addEventListener('click', (event) =>{
       console.log(event.target);  
     })
    
     gameBox.addEventListener('click', (event) => {
 
-        if (event.target.className == 'prim'){
+        if (event.target.className === 'prim'){
            event.target.dataset.used = 'true';
            disableAllPrims();
            enableAllOps();
+           checkForSubmit()
            answerDisplay.innerText += event.target.innerText;
         }
 
-        if (event.target.className == 'operator'){
+        if (event.target.className === 'operator'){
             answerDisplay.innerText += event.target.innerText;
             enableUnusedPrims();
             disableAllOps();
          }
 
-        if (event.target.id == 'clear'){
+        if (event.target.id === 'clear'){
             answerDisplay.innerText = '';
             let prims = document.querySelectorAll('.prim');
+            open.disabled = false;
+            openParens = 0;
             prims.forEach((prim) => {
                 prim.disabled = false
                 prim.dataset.used = 'false';
                 });
+            checkForSubmit()
         }
 
-        if (event.target.id == 'open'){
+        if (event.target.id === 'open'){
             answerDisplay.innerText += event.target.innerText;
             openParens++;
             enableUnusedPrims();
@@ -42,16 +50,25 @@ document.addEventListener("DOMContentLoaded", ()=> {
             enableCloseParen();
         }
 
-        if (event.target.id == 'close'){            
+        if (event.target.id === 'close'){            
             openParens--;
             answerDisplay.innerText += event.target.innerText;
+            checkForSubmit()
             if (openParens < 1){
                 disableCloseParen()
             }
         }
 
 
-    })
+        if (event.target.id == 'submit'){
+            if (math.evaluate(answerDisplay.innerText) == problem.finalAnswer()){
+                alert('Correct!')
+            } else {
+                alert('WROOOOOOONG')
+            }
+        }
+        
+    }) // end of gamebox eventListener
     
 
     function enableUnusedPrims(){
@@ -92,16 +109,25 @@ document.addEventListener("DOMContentLoaded", ()=> {
     }
 
     function enableCloseParen(){
-        let close = document.querySelector('#close');
         close.disabled = false;
     }
 
     function disableCloseParen(){
-        let close = document.querySelector('#close');
         close.disabled = true;
     }
    
-   
+    function checkForSubmit(){
+        let prims = Array.from(document.querySelectorAll('.prim'));
+
+        if(prims.every(prim => prim.dataset.used == 'true') && openParens == 0){
+            submitButton.disabled = false;           
+            open.disabled = true;
+            disableAllPrims();
+            disableAllOps();
+        } else {
+            submitButton.disabled = true;
+        }
+    }
    
 
 
