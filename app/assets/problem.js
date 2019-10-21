@@ -1,6 +1,16 @@
 class Problem {
-    constructor(numPrimitives, difficulty){
-        this.numPrimitives = numPrimitives;
+    constructor(difficulty){
+        switch (difficulty){
+            case 'easy': this.numPrimitives = 3;
+            break;
+            case 'medium': this.numPrimitives = 4;
+            break;
+            case 'hard': this.numPrimitives = 5;
+            break;
+            default: this.numPrimitives = 3;
+
+        }
+
         this.difficulty = difficulty;
         this.opsArray = ['+', '-', '*', '/'];
     }
@@ -12,6 +22,8 @@ class Problem {
             let newPrim = Math.floor(Math.random() * (max - min) + min);
             this.primArray.push(newPrim);           
         }
+
+        this.primArray.sort((a,b) => a-b);
     }
 
     generateProblem(min = 1, max = 11){
@@ -25,6 +37,49 @@ class Problem {
         })
 
         this.solution = this.solution.slice(0, -1);
+        if (!this.validate()) {
+            this.generateProblem();
+        }
+
+    }
+
+    validate(){
+        return math.evaluate(this.solution) % 1 == 0
+    }
+
+    finalAnswer(){
+        return math.evaluate(this.solution)
+    }
+
+    renderProblem(){
+        const target = document.querySelector('#target');
+        const primitives = document.querySelector('#primitives');
+        const operations = document.querySelector('#operations');
+
+        target.innerText = `Target: ${this.finalAnswer()}`;
+        
+        this.primArray.forEach((prim) => {
+            let button = document.createElement('button');
+            button.classList.add('prim');
+            button.innerText = prim;
+            primitives.append(button);
+        })
+
+        this.opsArray.forEach((operator) => {
+            let button = document.createElement('button');
+            button.classList.add('operator');
+            button.innerText = operator;
+            operations.append(button);
+        })
+
+        let parens =    [" ( ", " ) "];
+
+        parens.forEach((paren) => {
+            let button = document.createElement('button');
+            button.classList.add('operator');
+            button.innerText = paren;
+            operations.append(button);
+        })
     }
 
     
