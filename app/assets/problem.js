@@ -58,9 +58,13 @@ class Problem {
 
         target.innerText = `Target: ${this.finalAnswer()}`;
         
+        let idCounter = 1;
         this.primArray.forEach((prim) => {
             let button = document.createElement('button');
             button.classList.add('prim');
+            button.id = `prim-${idCounter}`;
+            button.dataset.used = false;
+            idCounter ++;
             button.innerText = prim;
             primitives.append(button);
         })
@@ -70,15 +74,22 @@ class Problem {
             button.classList.add('operator');
             button.innerText = operator;
             operations.append(button);
+            button.disabled = true;
         })
 
         let parens =    [" ( ", " ) "];
 
         parens.forEach((paren) => {
             let button = document.createElement('button');
-            button.classList.add('operator');
+            button.classList.add('paren');
             button.innerText = paren;
             operations.append(button);
+            if (button.innerText == '('){
+                button.id = 'open';
+            } else {
+                button.id = 'close';
+                button.disabled = true;
+            }
         })
     }
 
