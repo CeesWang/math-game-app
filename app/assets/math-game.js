@@ -3,18 +3,24 @@
 document.addEventListener("DOMContentLoaded", ()=> {
     const problem = new Problem('medium');
     const gameBox = document.querySelector('#game-box');
+
     const answerDisplay = document.querySelector('#answer-display');
     const undo = document.querySelector('#undo');
     const submitButton = document.querySelector('#submit');
     let openParens = 0;
     let actionStack = [];
 
+    let newGameButton = document.querySelector('#new-game');
+    newGameButton.addEventListener('click', e => {
+        gameBox.style.display = 'block';
+    })
 
 
     //startTimer();
 
     problem.generateProblem();
     problem.renderProblem();
+    //gameBox.style.display = 'none';
     let open = document.querySelector('#open');
     let close = document.querySelector('#close');
    

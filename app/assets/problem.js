@@ -79,20 +79,19 @@ class Problem {
             button.disabled = true;
         })
 
-        let parens =    [" ( ", " ) "];
-
-        parens.forEach((paren) => {
-            let button = document.createElement('button');
-            button.classList.add('paren');
-            button.innerText = paren;
-            operations.append(button);
-            if (button.innerText == '('){
-                button.id = 'open';
-            } else {
-                button.id = 'close';
-                button.disabled = true;
-            }
-        })
+        let openButton = document.createElement('button');
+        openButton.classList.add('paren');
+        openButton.innerText = '(';
+        openButton.id = 'open';
+        operations.append(openButton);
+            
+        let closeButton = document.createElement('button');
+        closeButton.classList.add('paren');
+        closeButton.innerText = ')';
+        closeButton.id = 'close';
+        closeButton.disabled = true;
+        operations.append(closeButton);
+            
     }
 
     
