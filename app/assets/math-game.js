@@ -1,7 +1,10 @@
+let actionStack = [];
+
 document.addEventListener("DOMContentLoaded", ()=> {
     const problem = new Problem('medium');
     const gameBox = document.querySelector('#game-box');
     const answerDisplay = document.querySelector('#answer-display');
+    const undo = document.querySelector('#undo');
     let openParens = 0;
  
     const submitButton = document.querySelector('#submit');
@@ -15,12 +18,16 @@ document.addEventListener("DOMContentLoaded", ()=> {
     })
    
     gameBox.addEventListener('click', (event) => {
+        if ((event.target.tagName == "BUTTON" && !(event.target.id == 'undo')) && !(event.target.id === 'clear')){
+            actionStack.push(event.target);
+        }
 
         if (event.target.className === 'prim'){
            event.target.dataset.used = 'true';
            disableAllPrims();
            enableAllOps();
-           checkForSubmit()
+           checkForSubmit();
+           enableCloseParenIfOpenParens();
            answerDisplay.innerText += event.target.innerText;
         }
 
@@ -29,12 +36,64 @@ document.addEventListener("DOMContentLoaded", ()=> {
             enableUnusedPrims();
             disableAllOps();
          }
+         
+         if (event.target.id == 'undo'){
+             let lastAction = actionStack.pop();
+
+             answerDisplay.innerText = answerDisplay.innerText.substring(0, answerDisplay.innerText.length - 1);
+
+             if(lastAction.className == 'prim'){
+                 lastAction.dataset.used = false;
+                 enableUnusedPrims();
+                 disableAllOps();
+             } else if (lastAction.className == 'operator'){
+                disableAllPrims();
+                enableAllOps();
+                checkForSubmit();
+             } else if (lastAction.id == 'open'){
+                 openParens--;
+                 enableCloseParenIfOpenParens();
+             } else if (lastAction.id == 'close'){
+                 openParens++;
+                 enableCloseParenIfOpenParens();
+             }
+
+             if(actionStack.length == 0){
+                answerDisplay.innerText = '';
+                let prims = document.querySelectorAll('.prim');
+                open.disabled = false;
+                openParens = 0;
+                actionStack = [];
+                prims.forEach((prim) => {
+                prim.disabled = false
+                prim.dataset.used = 'false';
+                });
+                checkForSubmit()
+            } else if (actionStack[actionStack.length - 1].className == 'prim'){
+                disableAllPrims();
+                enableAllOps();
+                enableCloseParenIfOpenParens();
+                checkForSubmit();
+             } else if (actionStack[actionStack.length - 1].className == 'operator'){
+                disableAllPrims();
+                enableAllOps();
+                checkForSubmit();
+            } else if (actionStack[actionStack.length - 1].id == 'open'){
+                enableUnusedPrims();
+                disableAllOps();
+                disableCloseParen();
+            } else if (actionStack[actionStack.length - 1].id == 'close'){
+                checkForSubmit()
+                enableCloseParenIfOpenParens();
+            }
+         }
 
         if (event.target.id === 'clear'){
             answerDisplay.innerText = '';
             let prims = document.querySelectorAll('.prim');
             open.disabled = false;
             openParens = 0;
+            actionStack = [];
             prims.forEach((prim) => {
                 prim.disabled = false
                 prim.dataset.used = 'false';
@@ -47,16 +106,14 @@ document.addEventListener("DOMContentLoaded", ()=> {
             openParens++;
             enableUnusedPrims();
             disableAllOps();
-            enableCloseParen();
+            disableCloseParen();
         }
 
         if (event.target.id === 'close'){            
             openParens--;
             answerDisplay.innerText += event.target.innerText;
             checkForSubmit()
-            if (openParens < 1){
-                disableCloseParen()
-            }
+            enableCloseParenIfOpenParens();
         }
 
 
@@ -64,7 +121,7 @@ document.addEventListener("DOMContentLoaded", ()=> {
             if (math.evaluate(answerDisplay.innerText) == problem.finalAnswer()){
                 alert('Correct!')
             } else {
-                alert('WROOOOOOONG')
+                alert(`WROOOOOOONG! Your answer: ${math.evaluate(answerDisplay.innerText)}`)
             }
         }
         
@@ -114,6 +171,14 @@ document.addEventListener("DOMContentLoaded", ()=> {
 
     function disableCloseParen(){
         close.disabled = true;
+    }
+
+    function enableCloseParenIfOpenParens(){
+        if (openParens > 0){
+            enableCloseParen();
+        } else {
+            disableCloseParen();
+        }
     }
    
     function checkForSubmit(){
