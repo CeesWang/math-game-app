@@ -1,30 +1,33 @@
 
 
 document.addEventListener("DOMContentLoaded", ()=> {
+    const pages = Array.from(document.querySelectorAll('.page'));
     const problem = new Problem('medium');
     const gameBox = document.querySelector('#game-box');
-
+    const menuBox = document.querySelector('#menu-box');
+    const selectDifficulty = document.querySelector('#select-difficulty');
     const answerDisplay = document.querySelector('#answer-display');
     const undo = document.querySelector('#undo');
     const submitButton = document.querySelector('#submit');
+    const newGameButton = document.querySelector('#new-game');
     let openParens = 0;
     let actionStack = [];
+    let currentGame;
 
-    let newGameButton = document.querySelector('#new-game');
     newGameButton.addEventListener('click', e => {
-        gameBox.style.display = 'block';
+        goToPage(selectDifficulty);
     })
 
-
-    //startTimer();
-
-    problem.generateProblem();
-    problem.renderProblem();
-    //gameBox.style.display = 'none';
-    let open = document.querySelector('#open');
-    let close = document.querySelector('#close');
+    selectDifficulty.addEventListener('click', (event) => {
+        if (event.target.className == 'new-game'){
+            startGame();
+        }
+    })
    
     gameBox.addEventListener('click', (event) => {
+        let open = document.querySelector('#open');
+        let close = document.querySelector('#close');
+
         if ((event.target.tagName == "BUTTON" && !(event.target.id == 'undo')) && !(event.target.id === 'clear')){
             actionStack.push(event.target);
         }
@@ -43,6 +46,7 @@ document.addEventListener("DOMContentLoaded", ()=> {
             enableUnusedPrims();
             disableAllOps();
         }
+        
         if (event.target.id == 'undo'){
             let lastAction = actionStack.pop();
 
@@ -65,16 +69,7 @@ document.addEventListener("DOMContentLoaded", ()=> {
             }
 
             if(actionStack.length == 0){
-                answerDisplay.innerText = '';
-                let prims = document.querySelectorAll('.prim');
-                open.disabled = false;
-                openParens = 0;
-                actionStack = [];
-                prims.forEach((prim) => {
-                prim.disabled = false
-                prim.dataset.used = 'false';
-            })
-                checkForSubmit()
+                resetButtons();
             } else if (actionStack[actionStack.length - 1].className == 'prim'){
                 disableAllPrims();
                 enableAllOps();
@@ -94,16 +89,7 @@ document.addEventListener("DOMContentLoaded", ()=> {
          }
 
         if (event.target.id === 'clear'){
-            answerDisplay.innerText = '';
-            let prims = document.querySelectorAll('.prim');
-            open.disabled = false;
-            openParens = 0;
-            actionStack = [];
-            prims.forEach((prim) => {
-                prim.disabled = false
-                prim.dataset.used = 'false';
-                });
-            checkForSubmit()
+            resetButtons();
         }
 
         if (event.target.id === 'open'){
@@ -124,23 +110,58 @@ document.addEventListener("DOMContentLoaded", ()=> {
 
         if (event.target.id == 'submit'){
             let userAnswer = math.evaluate(answerDisplay.innerText);
-            if (userAnswer == problem.finalAnswer()){
-                alert('Correct!')
+            if (userAnswer == (currentGame.lastProblem()).finalAnswer()){
+                console.log(`${userAnswer} is Correct!`);
+                (currentGame.lastProblem()).correct = true;
+                currentGame.score++;
+                displayScore();
+                currentGame.createProblem();
             } else {
-                alert(`WROOOOOOONG! Your Answer: ${userAnswer}`)
+                console.log(`${userAnswer} is Incorrect!`);
+                (currentGame.lastProblem()).correct = false;
+                displayScore();
+                currentGame.createProblem();
             }
+            resetButtons();
         }
+
+        function resetButtons(){
+            answerDisplay.innerText = '';
+            let prims = document.querySelectorAll('.prim');
+            open.disabled = false;
+            openParens = 0;
+            actionStack = [];
+            prims.forEach((prim) => {
+                prim.disabled = false
+                prim.dataset.used = 'false';
+                });
+            checkForSubmit()
+        }
+
+
         
     }) // end of gamebox eventListener
-    
+
+    function startGame() {
+        let difficulty = event.target.id;
+        currentGame = new Game(difficulty);
+        displayScore();
+        currentGame.createProblem();
+        goToPage(gameBox);
+        startTimer();
+    }
+
+    function displayScore(){
+        let scoreRatio = document.querySelector('#score-ratio');
+        let totalProbs = currentGame.problemRecord.length;
+        scoreRatio.innerText = `${currentGame.score}/${totalProbs}`;
+    }
 
     function enableUnusedPrims(){
         let prims = document.querySelectorAll('.prim');
-        // console.log(prims)
         prims.forEach((prim) => {
             // debugger
            if (prim.dataset.used == 'false'){
-                console.log(prim, prim.dataset.used)
                 prim.disabled = false;
             }
             
@@ -149,46 +170,36 @@ document.addEventListener("DOMContentLoaded", ()=> {
 
     function disableAllPrims(){
         let prims = document.querySelectorAll('.prim');
-
-        prims.forEach((prim) => {
-                prim.disabled = true
-        })
+        prims.forEach((prim) => prim.disabled = true)
     }
 
     function disableAllOps(){
         let ops = document.querySelectorAll('.operator');
-
-        ops.forEach(op => {
-            op.disabled = true;
-        })
+        ops.forEach(op => op.disabled = true)
     }
 
     function enableAllOps(){
         let ops = document.querySelectorAll('.operator');
-
-        ops.forEach(op => {
-            op.disabled = false;
-        })
+        ops.forEach(op => op.disabled = false)
     }
 
     function enableCloseParen(){
+        let close = document.querySelector('#close');
         close.disabled = false;
     }
 
     function disableCloseParen(){
+        let close = document.querySelector('#close');
         close.disabled = true;
     }
 
     function enableCloseParenIfOpenParens(){
-        if (openParens > 0){
-            enableCloseParen();
-        } else {
-            disableCloseParen();
-        }
+        openParens > 0 ? enableCloseParen() : disableCloseParen();
     }
    
     function checkForSubmit(){
         let prims = Array.from(document.querySelectorAll('.prim'));
+        let open = document.querySelector('#open');
 
         if(prims.every(prim => prim.dataset.used == 'true') && openParens == 0){
             submitButton.disabled = false;           
@@ -200,27 +211,29 @@ document.addEventListener("DOMContentLoaded", ()=> {
         }
     }
 
-    function startTimer(time = 120000){
-        let seconds = time/1000;
+    function startTimer(seconds = 120){
         let timeEle = document.querySelector('#time');
         timeEle.innerText = `${convertSecToMin(seconds)}`;
-        let timer = setInterval(decrementTimer, 1000);
-
+        timer = setInterval(decrementTimer, 1000);
     }
 
     function decrementTimer(){
         let timeEle = document.querySelector('#time');
-        console.log('tick')
         let time = convertMinToSec(timeEle.innerText)
         if (time > 0){
-            time--
+            time--;
             timeEle.innerText = convertSecToMin(time);
-            console.log(timeEle)
+        }
+        else {
+            alert("game is over");
+            clearInterval(timer);
+            // show result screen
+            // ask user what to do
+            // finishGame()
         }
     }
 
     function convertMinToSec(timeString){
-        console.log(timeString)
         let [minutes, seconds] = timeString.split(':');
         let totalSeconds = (parseInt(minutes) * 60) + parseInt(seconds);
         return totalSeconds;
@@ -244,41 +257,11 @@ document.addEventListener("DOMContentLoaded", ()=> {
             str += ele.innerText;
         })
         return str;
+
     }
    
-
-
-
-
-   
-    // const form = document.getElementById('answer-form');
-    // form.addEventListener ('input',(event)=> {
-    //     event.preventDefault();
-    //     console.log(event.target.value);
-    //     let input = event.target.value
-    //     if (input.length > 0 && !isNaN(parseInt(input[input.length-1])) ) {
-    //         let result = math.evaluate(event.target.value);
-    //         console.log(result);
-    //         document.getElementById("result").value = result;
-    //     }
-    //     else
-    //     document.getElementById("result").value = input;
-
-    // })
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-})
+    function goToPage(pageName){
+        pages.forEach(page => {page.style.display = 'none'})
+        pageName.style.display = 'block';
+    }
+})// end of DOMContentLoaded
