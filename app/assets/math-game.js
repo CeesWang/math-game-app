@@ -1,21 +1,22 @@
-let actionStack = [];
+
 
 document.addEventListener("DOMContentLoaded", ()=> {
     const problem = new Problem('medium');
     const gameBox = document.querySelector('#game-box');
     const answerDisplay = document.querySelector('#answer-display');
     const undo = document.querySelector('#undo');
-    let openParens = 0;
- 
     const submitButton = document.querySelector('#submit');
+    let openParens = 0;
+    let actionStack = [];
+
+
+
+    //startTimer();
 
     problem.generateProblem();
     problem.renderProblem();
     let open = document.querySelector('#open');
     let close = document.querySelector('#close');
-    document.addEventListener('click', (event) =>{
-      console.log(event.target);  
-    })
    
     gameBox.addEventListener('click', (event) => {
         if ((event.target.tagName == "BUTTON" && !(event.target.id == 'undo')) && !(event.target.id === 'clear')){
@@ -28,37 +29,36 @@ document.addEventListener("DOMContentLoaded", ()=> {
            enableAllOps();
            checkForSubmit();
            enableCloseParenIfOpenParens();
-           answerDisplay.innerText += event.target.innerText;
+           answerDisplay.innerText = convertActionStackToString();
         }
 
         if (event.target.className === 'operator'){
-            answerDisplay.innerText += event.target.innerText;
+            answerDisplay.innerText = convertActionStackToString();
             enableUnusedPrims();
             disableAllOps();
-         }
-         
-         if (event.target.id == 'undo'){
-             let lastAction = actionStack.pop();
+        }
+        if (event.target.id == 'undo'){
+            let lastAction = actionStack.pop();
 
-             answerDisplay.innerText = answerDisplay.innerText.substring(0, answerDisplay.innerText.length - 1);
+            answerDisplay.innerText = convertActionStackToString();
 
-             if(lastAction.className == 'prim'){
-                 lastAction.dataset.used = false;
-                 enableUnusedPrims();
-                 disableAllOps();
-             } else if (lastAction.className == 'operator'){
+            if(lastAction.className == 'prim'){
+                lastAction.dataset.used = 'false';
+                enableUnusedPrims();
+                disableAllOps();
+            } else if (lastAction.className == 'operator'){
                 disableAllPrims();
                 enableAllOps();
                 checkForSubmit();
-             } else if (lastAction.id == 'open'){
-                 openParens--;
-                 enableCloseParenIfOpenParens();
-             } else if (lastAction.id == 'close'){
-                 openParens++;
-                 enableCloseParenIfOpenParens();
-             }
+            } else if (lastAction.id == 'open'){
+                openParens--;
+                enableCloseParenIfOpenParens();
+            } else if (lastAction.id == 'close'){
+                openParens++;
+                enableCloseParenIfOpenParens();
+            }
 
-             if(actionStack.length == 0){
+            if(actionStack.length == 0){
                 answerDisplay.innerText = '';
                 let prims = document.querySelectorAll('.prim');
                 open.disabled = false;
@@ -67,7 +67,7 @@ document.addEventListener("DOMContentLoaded", ()=> {
                 prims.forEach((prim) => {
                 prim.disabled = false
                 prim.dataset.used = 'false';
-                });
+            })
                 checkForSubmit()
             } else if (actionStack[actionStack.length - 1].className == 'prim'){
                 disableAllPrims();
@@ -75,9 +75,8 @@ document.addEventListener("DOMContentLoaded", ()=> {
                 enableCloseParenIfOpenParens();
                 checkForSubmit();
              } else if (actionStack[actionStack.length - 1].className == 'operator'){
-                disableAllPrims();
-                enableAllOps();
-                checkForSubmit();
+                enableUnusedPrims();
+                disableAllOps();
             } else if (actionStack[actionStack.length - 1].id == 'open'){
                 enableUnusedPrims();
                 disableAllOps();
@@ -102,7 +101,7 @@ document.addEventListener("DOMContentLoaded", ()=> {
         }
 
         if (event.target.id === 'open'){
-            answerDisplay.innerText += event.target.innerText;
+            answerDisplay.innerText = convertActionStackToString();
             openParens++;
             enableUnusedPrims();
             disableAllOps();
@@ -111,7 +110,7 @@ document.addEventListener("DOMContentLoaded", ()=> {
 
         if (event.target.id === 'close'){            
             openParens--;
-            answerDisplay.innerText += event.target.innerText;
+            answerDisplay.innerText = convertActionStackToString();
             checkForSubmit()
             enableCloseParenIfOpenParens();
         }
@@ -192,6 +191,52 @@ document.addEventListener("DOMContentLoaded", ()=> {
         } else {
             submitButton.disabled = true;
         }
+    }
+
+    function startTimer(time = 120000){
+        let seconds = time/1000;
+        let timeEle = document.querySelector('#time');
+        timeEle.innerText = `${convertSecToMin(seconds)}`;
+        let timer = setInterval(decrementTimer, 1000);
+
+    }
+
+    function decrementTimer(){
+        let timeEle = document.querySelector('#time');
+        console.log('tick')
+        let time = convertMinToSec(timeEle.innerText)
+        if (time > 0){
+            time--
+            timeEle.innerText = convertSecToMin(time);
+            console.log(timeEle)
+        }
+    }
+
+    function convertMinToSec(timeString){
+        console.log(timeString)
+        let [minutes, seconds] = timeString.split(':');
+        let totalSeconds = (parseInt(minutes) * 60) + parseInt(seconds);
+        return totalSeconds;
+    }
+
+    function convertSecToMin(totalSeconds){
+        let minutes = Math.floor(totalSeconds/60);
+        let seconds = totalSeconds%60;
+
+        if (seconds < 10){
+            seconds = '0' + seconds;
+        }
+
+        return `${minutes}:${seconds}`
+    }
+
+    function convertActionStackToString(){
+        let str = '';
+        let actionArray = Array.from(actionStack);
+        actionArray.forEach(ele => {
+            str += ele.innerText;
+        })
+        return str;
     }
    
 
