@@ -10,6 +10,7 @@ document.addEventListener("DOMContentLoaded", ()=> {
     const undo = document.querySelector('#undo');
     const submitButton = document.querySelector('#submit');
     const newGameButton = document.querySelector('#new-game');
+    const scoreBoard = document.getElementById("score-board");
     let openParens = 0;
     let actionStack = [];
     let currentGame;
@@ -115,35 +116,48 @@ document.addEventListener("DOMContentLoaded", ()=> {
             let userAnswer = math.evaluate(answerDisplay.innerText);
             if (userAnswer == (currentGame.lastProblem()).finalAnswer()){
                 console.log(`${userAnswer} is Correct!`);
-                (currentGame.lastProblem()).correct = true;
-                currentGame.score++;
-                displayScore();
-                currentGame.createProblem();
+                rightAnswer();
+            
             } else {
                 console.log(`${userAnswer} is Incorrect!`);
-                (currentGame.lastProblem()).correct = false;
-                displayScore();
-                currentGame.createProblem();
+                wrongAnswer();
             }
             resetButtons();
         }
 
-        function resetButtons(){
-            answerDisplay.innerText = '';
-            let prims = document.querySelectorAll('.prim');
-            open.disabled = false;
-            openParens = 0;
-            actionStack = [];
-            prims.forEach((prim) => {
-                prim.disabled = false
-                prim.dataset.used = 'false';
-                });
-            checkForSubmit()
-        }
-
-
         
     }) // end of gamebox eventListener
+    function rightAnswer() {
+        (currentGame.lastProblem()).correct = true;
+        currentGame.score++;
+        let rightIcon = document.createElement("i");
+        rightIcon.classList.add('fas', 'fa-check','fa-2x');
+        scoreBoard.appendChild(rightIcon);
+        displayScore();
+        currentGame.createProblem();
+    }
+    function wrongAnswer() {
+        (currentGame.lastProblem()).correct = false;
+        let wrongIcon = document.createElement("i");
+        wrongIcon.classList.add('fas', 'fa-times', 'fa-2x'); 
+        scoreBoard.appendChild(wrongIcon);
+        displayScore();
+        currentGame.createProblem();
+
+    }
+
+    function resetButtons(){
+        answerDisplay.innerText = '';
+        let prims = document.querySelectorAll('.prim');
+        open.disabled = false;
+        openParens = 0;
+        actionStack = [];
+        prims.forEach((prim) => {
+            prim.disabled = false
+            prim.dataset.used = 'false';
+            });
+        checkForSubmit()
+    }
 
     function startGame() {
         let difficulty = event.target.id;

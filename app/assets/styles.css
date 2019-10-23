@@ -1,0 +1,75 @@
+@font-face {
+    font-family: 'retro';
+    src: url('Haike-Regular.eot?#iefix') format('embedded-opentype'), /* IE6-IE8 */
+    url('Haike-Regular.woff2') format('woff2'), /* Super Modern Browsers */
+    url('Haike-Regular.woff') format('woff'), /* Pretty Modern Browsers */
+    url('Haike-Regular.ttf')  format('truetype'), /* Safari, Android, iOS */
+    url('Haike-Regular.svg#svgFontName') format('svg'); /* Legacy iOS */
+}
+  
+html { 
+    background:  url("https://wallpaperplay.com/walls/full/6/6/a/34850.jpg") no-repeat center center fixed; 
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    -o-background-size: cover;
+    background-size: cover;
+  }
+#title {
+    border-style: solid;
+    border-width: 5px;
+    border-color: aqua;
+    text-align: center;
+    font-family: 'retro';
+    font-size: 30px;
+
+}
+#menubox {
+    border-style: solid;
+    border-radius: 20px;
+    text-align: center;
+    border-width: 5px;
+    border-color: black;
+    margin: auto;
+    position: relative;
+    margin-top: 100px;
+    width: 1100px;
+    height: 700px;
+    background: rgba(255,255,255,0.2)
+}
+#new-game {
+    font-family: 'retro';
+    font-size: 25px;
+    font-weight: bold;  
+    margin-top: 400px;
+}
+#new-game:hover {
+    transform: scale(1.2); 
+}
+
+#select-difficulty {
+    font-family: 'retro';
+    font-size: 25px;
+    font-weight: bold;  
+    margin-top: 250px;
+}
+
+.new-game:hover {
+    transform: scale(1.2); 
+}
+
+#score-board {
+    border-style: solid;
+    border-width: 5px;
+    border-color: black;
+    display: flex;
+    flex-wrap: wrap;
+}
+.fa-check {
+    color: green;
+    margin-right: 5px;
+}
+
+.fa-times {
+    color: red;
+    margin-right: 5px;
+}
