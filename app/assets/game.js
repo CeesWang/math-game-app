@@ -21,11 +21,14 @@ class Game {
     }
 
     displayGameResults(){
-        let recordBox = document.createElement('div');
-        recordBox.classList.add('results-box');
-        recordBox.dataset.score = this.score;
-        recordBox.innerHTML = `<h3> Level: ${this.difficulty} </h3><br>
-        <h3> Score: ${this.score}`;
+        let scoreDisplay = document.querySelector('#results-score');
+        let difficultyDisplay = document.querySelector('#results-difficulty');
+
+        scoreDisplay.innerText = `Score: ${this.score}/${this.problemRecord.length}`;
+        difficultyDisplay.innerText = `Difficulty: ${this.difficulty}`;
+
+
+        let recordBox = document.querySelector('#record-box');
         this.problemRecord.forEach((prob) => {
             let result = prob.createProblemResult();
             recordBox.append(result);

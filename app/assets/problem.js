@@ -98,17 +98,24 @@ class Problem {
     }
 
     createProblemResult(){
+        let wrongIcon = document.createElement("i");
+        wrongIcon.classList.add('fas', 'fa-times', 'fa-2x'); 
+
+        let rightIcon = document.createElement("i");
+        rightIcon.classList.add('fas', 'fa-check','fa-2x');
+
+
         let p = document.createElement('p');
         p.classList.add('problem-result');
 
         p.innerText = `${this.userAnswer} = ${this.userAnswerValue}`;
 
         if (this.solved){
-            p.innerText += ` CORRECT`;
+            p.append(rightIcon);
         } else {
             p.innerText += ` SOLUTION: ${this.solution} = ${this.target()}`
+            p.append(wrongIcon)
         }
-
         return p;
     }
 

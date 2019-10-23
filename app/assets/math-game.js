@@ -2,15 +2,15 @@ const URL_PREFIX = 'http://localhost:3000';
 
 document.addEventListener("DOMContentLoaded", ()=> {
     const pages = Array.from(document.querySelectorAll('.page'));
-    const problem = new Problem('medium');
     const gameBox = document.querySelector('#game-box');
-    const menuBox = document.querySelector('#menu-box');
     const selectDifficulty = document.querySelector('#select-difficulty');
+    const resultsPage = document.querySelector('#results-page')
     const answerDisplay = document.querySelector('#answer-display');
-    const undo = document.querySelector('#undo');
     const submitButton = document.querySelector('#submit');
     const newGameButton = document.querySelector('#new-game');
     const scoreBoard = document.getElementById("score-board");
+    const submitNameform = document.getElementById("username-form");
+    const leaderboard = document.getElementById("leaderboard");
     let openParens = 0;
     let actionStack = [];
     let currentGame;
@@ -128,11 +128,17 @@ document.addEventListener("DOMContentLoaded", ()=> {
             }
             resetButtons();
         }
-
-        
     }) // end of gamebox eventListener
+    
+submitNameform.addEventListener('submit', event => {
+        event.preventDefault();
+        submitGame(currentGame, event.target.name.value)
+        .then(getTopTen(currentGame.difficulty))
+        .then(goToPage(leaderboard))
+    })
+
     function rightAnswer() {
-        (currentGame.lastProblem()).correct = true;
+        (currentGame.lastProblem()).solved = true;
         currentGame.score++;
         let rightIcon = document.createElement("i");
         rightIcon.classList.add('fas', 'fa-check','fa-2x');
@@ -141,7 +147,7 @@ document.addEventListener("DOMContentLoaded", ()=> {
         currentGame.createProblem();
     }
     function wrongAnswer() {
-        (currentGame.lastProblem()).correct = false;
+        (currentGame.lastProblem()).solved = false;
         let wrongIcon = document.createElement("i");
         wrongIcon.classList.add('fas', 'fa-times', 'fa-2x'); 
         scoreBoard.appendChild(wrongIcon);
@@ -245,7 +251,7 @@ document.addEventListener("DOMContentLoaded", ()=> {
         }
     }
 
-    function startTimer(seconds = 120){
+    function startTimer(seconds = 10){
         let timeEle = document.querySelector('#time');
         timeEle.innerText = `${convertSecToMin(seconds)}`;
         timer = setInterval(decrementTimer, 1000);
@@ -263,8 +269,14 @@ document.addEventListener("DOMContentLoaded", ()=> {
             clearInterval(timer);
             // show result screen
             // ask user what to do
-            // finishGame()
+            currentGame.problemRecord.pop();
+             finishGame()
         }
+    }
+
+    function finishGame(){
+        currentGame.displayGameResults();
+        goToPage(resultsPage);
     }
 
     function convertMinToSec(timeString){
@@ -348,26 +360,61 @@ document.addEventListener("DOMContentLoaded", ()=> {
         .then(res => res.json())
     }
 
-
-    function submitProblem(problem, game){
-        return fetch(`${URL_PREFIX}/problems`,{
-            method: 'POST',
-            headers: {
-            'Content-Type': 'application/json',
-            'Accept': 'application/json'
-            },
-            body: JSON.stringify({
-            "target": problem.target,
-            "solution": problem.target(),
-            "user_answer": problem.userAnswer,
-            "user_answer_value": problem.userAnswerValue,
-            "solved": problem.solved,
-            "game_id": game.id
-            })
-        })
+    function getAllGames(){
+        return fetch(`${URL_PREFIX}/games`)
         .then(res => res.json())
+    }
+
+    function getTopTen(difficulty){
+        getAllGames()
+        .then(json => {
+            debugger;
+            let gameArray = json.filter((game) => checkDifficulty(game, game.difficulty))
+            gameArray.sort((a, b) => parseInt(b.score) - parseInt(a.score));
+            let topTen = gameArray.slice(0, 10);
+            displayLeaderBoard(topTen);
+        })
+    }
+
+
+    function displayLeaderBoard(topTen){
+        
+        let ol = document.querySelector('#top-ten');
+
+        topTen.forEach(game => {
+            let entry = document.createElement('li');
+            entry.innerText = `${game.user}         Score: ${game.score}`
+
+            ol.append(entry)
+        })
 
     }
+
+    function checkDifficulty(game, difficulty){
+        return game.difficulty == difficulty;
+    }
+
+
+    // STRETCH GOAL:
+    // function submitProblem(problem, game){
+    //     return fetch(`${URL_PREFIX}/problems`,{
+    //         method: 'POST',
+    //         headers: {
+    //         'Content-Type': 'application/json',
+    //         'Accept': 'application/json'
+    //         },
+    //         body: JSON.stringify({
+    //         "target": problem.target,
+    //         "solution": problem.target(),
+    //         "user_answer": problem.userAnswer,
+    //         "user_answer_value": problem.userAnswerValue,
+    //         "solved": problem.solved,
+    //         "game_id": game.id
+    //         })
+    //     })
+    //     .then(res => res.json())
+
+    // }
 
 
 })// end of DOMContentLoaded
