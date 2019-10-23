@@ -2,14 +2,14 @@
 
 document.addEventListener("DOMContentLoaded", ()=> {
     const pages = Array.from(document.querySelectorAll('.page'));
-    const problem = new Problem('medium');
     const gameBox = document.querySelector('#game-box');
-    const menuBox = document.querySelector('#menu-box');
     const selectDifficulty = document.querySelector('#select-difficulty');
     const answerDisplay = document.querySelector('#answer-display');
-    const undo = document.querySelector('#undo');
     const submitButton = document.querySelector('#submit');
     const newGameButton = document.querySelector('#new-game');
+    let open = document.querySelector('#open');
+    let close = document.querySelector('#close');
+    let ops = document.querySelectorAll('.operator');
     let openParens = 0;
     let actionStack = [];
     let currentGame;
@@ -25,23 +25,18 @@ document.addEventListener("DOMContentLoaded", ()=> {
     })
    
     gameBox.addEventListener('click', (event) => {
-        let open = document.querySelector('#open');
-        let close = document.querySelector('#close');
-
-        if ((event.target.tagName == "BUTTON" && !(event.target.id == 'undo')) && !(event.target.id === 'clear')){
-            actionStack.push(event.target);
-        }
-
         if (event.target.className === 'prim'){
-           event.target.dataset.used = 'true';
-           disableAllPrims();
-           enableAllOps();
-           checkForSubmit();
-           enableCloseParenIfOpenParens();
-           answerDisplay.innerText = convertActionStackToString();
+            actionStack.push(event.target);
+            event.target.dataset.used = 'true';
+            disableAllPrims();
+            enableAllOps();
+            checkForSubmit();
+            enableCloseParenIfOpenParens();
+            answerDisplay.innerText = convertActionStackToString();
         }
 
         if (event.target.className === 'operator'){
+            actionStack.push(event.target);
             answerDisplay.innerText = convertActionStackToString();
             enableUnusedPrims();
             disableAllOps();
@@ -49,7 +44,6 @@ document.addEventListener("DOMContentLoaded", ()=> {
         
         if (event.target.id == 'undo'){
             let lastAction = actionStack.pop();
-
             answerDisplay.innerText = convertActionStackToString();
 
             if(lastAction.className == 'prim'){
@@ -93,6 +87,7 @@ document.addEventListener("DOMContentLoaded", ()=> {
         }
 
         if (event.target.id === 'open'){
+            actionStack.push(event.target);
             answerDisplay.innerText = convertActionStackToString();
             openParens++;
             enableUnusedPrims();
@@ -100,7 +95,8 @@ document.addEventListener("DOMContentLoaded", ()=> {
             disableCloseParen();
         }
 
-        if (event.target.id === 'close'){            
+        if (event.target.id === 'close'){
+            actionStack.push(event.target);            
             openParens--;
             answerDisplay.innerText = convertActionStackToString();
             checkForSubmit()
@@ -114,14 +110,12 @@ document.addEventListener("DOMContentLoaded", ()=> {
                 console.log(`${userAnswer} is Correct!`);
                 (currentGame.lastProblem()).correct = true;
                 currentGame.score++;
-                displayScore();
-                currentGame.createProblem();
             } else {
                 console.log(`${userAnswer} is Incorrect!`);
                 (currentGame.lastProblem()).correct = false;
-                displayScore();
-                currentGame.createProblem();
             }
+            displayScore();
+            currentGame.createProblem();
             resetButtons();
         }
 
@@ -174,22 +168,20 @@ document.addEventListener("DOMContentLoaded", ()=> {
     }
 
     function disableAllOps(){
-        let ops = document.querySelectorAll('.operator');
+ 
         ops.forEach(op => op.disabled = true)
     }
 
     function enableAllOps(){
-        let ops = document.querySelectorAll('.operator');
+ 
         ops.forEach(op => op.disabled = false)
     }
 
     function enableCloseParen(){
-        let close = document.querySelector('#close');
         close.disabled = false;
     }
 
     function disableCloseParen(){
-        let close = document.querySelector('#close');
         close.disabled = true;
     }
 
@@ -199,7 +191,6 @@ document.addEventListener("DOMContentLoaded", ()=> {
    
     function checkForSubmit(){
         let prims = Array.from(document.querySelectorAll('.prim'));
-        let open = document.querySelector('#open');
 
         if(prims.every(prim => prim.dataset.used == 'true') && openParens == 0){
             submitButton.disabled = false;           
@@ -246,18 +237,12 @@ document.addEventListener("DOMContentLoaded", ()=> {
         if (seconds < 10){
             seconds = '0' + seconds;
         }
-
         return `${minutes}:${seconds}`
     }
 
     function convertActionStackToString(){
-        let str = '';
         let actionArray = Array.from(actionStack);
-        actionArray.forEach(ele => {
-            str += ele.innerText;
-        })
-        return str;
-
+        return actionArray.reduce((actions,currAction) => actions + currAction.innerText,'');
     }
    
     function goToPage(pageName){
