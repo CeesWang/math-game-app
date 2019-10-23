@@ -49,7 +49,7 @@ class Problem {
         return math.evaluate(this.solution) % 1 == 0
     }
 
-    finalAnswer(){
+    target(){
         return math.evaluate(this.solution)
     }
 
@@ -58,7 +58,7 @@ class Problem {
         const primitives = document.querySelector('#primitives');
         const operations = document.querySelector('#operations');
 
-        target.innerText = `Target: ${this.finalAnswer()}`;
+        target.innerText = `Target: ${this.target()}`;
         primitives.innerText = `Primitives: `;
 
         let idCounter = 1;
@@ -71,6 +71,8 @@ class Problem {
             button.innerText = prim;
             primitives.append(button);
         })
+
+        
 
         // this.opsArray.forEach((operator) => {
         //     let button = document.createElement('button');
@@ -93,6 +95,21 @@ class Problem {
         // closeButton.disabled = true;
         // operations.append(closeButton);
             
+    }
+
+    createProblemResult(){
+        let p = document.createElement('p');
+        p.classList.add('problem-result');
+
+        p.innerText = `${this.userAnswer} = ${this.userAnswerValue}`;
+
+        if (this.solved){
+            p.innerText += ` CORRECT`;
+        } else {
+            p.innerText += ` SOLUTION: ${this.solution} = ${this.target()}`
+        }
+
+        return p;
     }
 
     

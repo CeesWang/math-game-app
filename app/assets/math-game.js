@@ -1,4 +1,4 @@
-
+const URL_PREFIX = 'http://localhost:3000';
 
 document.addEventListener("DOMContentLoaded", ()=> {
     const pages = Array.from(document.querySelectorAll('.page'));
@@ -113,11 +113,15 @@ document.addEventListener("DOMContentLoaded", ()=> {
 
 
         if (event.target.id == 'submit'){
-            let userAnswer = math.evaluate(answerDisplay.innerText);
-            if (userAnswer == (currentGame.lastProblem()).finalAnswer()){
+            let userAnswer = answerDisplay.innerText;
+            let userAnswerValue = math.evaluate(userAnswer);
+
+            (currentGame.lastProblem()).userAnswer = userAnswer;
+            (currentGame.lastProblem()).userAnswerValue = userAnswerValue;
+
+            if (userAnswerValue == (currentGame.lastProblem()).target()){
                 console.log(`${userAnswer} is Correct!`);
                 rightAnswer();
-            
             } else {
                 console.log(`${userAnswer} is Incorrect!`);
                 wrongAnswer();
@@ -326,4 +330,44 @@ document.addEventListener("DOMContentLoaded", ()=> {
             }
         }
     }
+
+    function submitGame(game, userName='guest'){
+        return fetch(`${URL_PREFIX}/games`,{
+            method: 'POST',
+            headers: {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json'
+            },
+            body: JSON.stringify({
+            "user": userName,
+            "difficulty": game.difficulty,
+            "score": game.score,
+            "problem_count": game.problemRecord.length
+            })
+        })
+        .then(res => res.json())
+    }
+
+
+    function submitProblem(problem, game){
+        return fetch(`${URL_PREFIX}/problems`,{
+            method: 'POST',
+            headers: {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json'
+            },
+            body: JSON.stringify({
+            "target": problem.target,
+            "solution": problem.target(),
+            "user_answer": problem.userAnswer,
+            "user_answer_value": problem.userAnswerValue,
+            "solved": problem.solved,
+            "game_id": game.id
+            })
+        })
+        .then(res => res.json())
+
+    }
+
+
 })// end of DOMContentLoaded
