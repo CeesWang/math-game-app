@@ -5,6 +5,7 @@ class Game {
         this.user = user;
         this.problemRecord = [];
         this.score = 0;
+        this.solved = false;
     }
 
     createProblem(){
@@ -17,6 +18,19 @@ class Game {
 
     lastProblem(){
         return this.problemRecord[this.problemRecord.length -1];
+    }
+
+    displayGameResults(){
+        let recordBox = document.createElement('div');
+        recordBox.classList.add('results-box');
+        recordBox.dataset.score = this.score;
+        recordBox.innerHTML = `<h3> Level: ${this.difficulty} </h3><br>
+        <h3> Score: ${this.score}`;
+        this.problemRecord.forEach((prob) => {
+            let result = prob.createProblemResult();
+            recordBox.append(result);
+        })
+        
     }
 
 
