@@ -22,14 +22,22 @@ document.addEventListener("DOMContentLoaded", ()=> {
     const correctDing = new Audio('correct.wav');
     const timesUp = new Audio('timesUp.wav');
     const overlay = document.getElementById("overlay");
+    const beep = new Audio('buttonBeep.wav');
+    const themeSong = new Audio('themeSong.wav');
     let gameTimer;
     let countDownTimer;
     let openParens = 0;
     let actionStack = [];
     let currentGame;
 
+    themeSong.loop = true;
+    themeSong.play();
+    themeSong.loop = true;
+
+
     newGameButton.addEventListener('click', e => {
         startMusic.play();
+        
         goToPage(selectDifficulty);
         overlay.display = "none";
     })
@@ -65,6 +73,7 @@ document.addEventListener("DOMContentLoaded", ()=> {
    
     gameBox.addEventListener('click', (event) => {
         if (event.target.className === 'prim'){
+            beep.play();
             actionStack.push(event.target);
             event.target.dataset.used = 'true';
             disableAllPrims();
@@ -75,6 +84,7 @@ document.addEventListener("DOMContentLoaded", ()=> {
         }
 
         if (event.target.classList[0] === "fas" && event.target.id !== "undoIcon" ) {
+            beep.play();
             actionStack.push(event.target.parentNode);
             enableUnusedPrims();
             disableCloseParen();
@@ -83,6 +93,7 @@ document.addEventListener("DOMContentLoaded", ()=> {
         }
 
         if (event.target.className === 'operator'){
+            beep.play();
             actionStack.push(event.target);
             enableUnusedPrims();
             disableCloseParen();
@@ -90,6 +101,7 @@ document.addEventListener("DOMContentLoaded", ()=> {
             answerDisplay.innerText = convertActionStackToString();
         }
         if (event.target.id === 'undo' || event.target.id === "undoIcon") {
+            beep.play();
             let lastAction = actionStack.pop();
             answerDisplay.innerText = convertActionStackToString();
             if(lastAction.className == 'prim'){
@@ -130,10 +142,12 @@ document.addEventListener("DOMContentLoaded", ()=> {
          }
 
         if (event.target.id === 'clear'){
+            beep.play();
             resetButtons();
         }
 
         if (event.target.id === 'open'){
+            beep.play();
             actionStack.push(event.target);
             answerDisplay.innerText = convertActionStackToString();
             openParens++;
@@ -142,7 +156,8 @@ document.addEventListener("DOMContentLoaded", ()=> {
             disableCloseParen();
         }
 
-        if (event.target.id === 'close'){     
+        if (event.target.id === 'close'){
+            beep.play();     
             actionStack.push(event.target);       
             openParens--;
             answerDisplay.innerText = convertActionStackToString();
@@ -314,6 +329,9 @@ document.addEventListener("DOMContentLoaded", ()=> {
         let timeEle = document.querySelector('#time');
         timeEle.innerText = `${convertSecToMin(seconds)}`;
         gameTimer = setInterval(decrementTimer, 1000);
+        themeSong.loop = true;
+        themeSong.play();
+        themeSong.loop = true;
     }
 
     function decrementTimer(){
@@ -326,6 +344,9 @@ document.addEventListener("DOMContentLoaded", ()=> {
         else {
             //alert
             clearInterval(gameTimer);
+            themeSong.loop = false;
+            themeSong.pause();
+            themeSong.loop = false;
             overlay.style.display = "block";
             countdown.innerText = "Times Up"
             timesUp.play();
