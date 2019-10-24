@@ -1,5 +1,5 @@
 const URL_PREFIX = 'http://localhost:3000';
-const GAME_DURATION_SEC = 30;
+const GAME_DURATION_SEC = 60;
 
 document.addEventListener("DOMContentLoaded", ()=> {
     const pages = Array.from(document.querySelectorAll('.page'));
@@ -51,6 +51,7 @@ document.addEventListener("DOMContentLoaded", ()=> {
             actionStack = [];
             currentGame = '';
             scoreBoard.innerHTML = ``;
+  
             goToPage(gameBox);
             countDownTimer = setInterval(countDown.bind(null,event.target.id), 1000);
         }
@@ -178,10 +179,12 @@ document.addEventListener("DOMContentLoaded", ()=> {
     }
     
     submitNameform.addEventListener('submit', event => {
+        currentGame.user = event.target.name.value;
         event.preventDefault();
         submitGame(currentGame, event.target.name.value)
         .then(getTopTen(currentGame.difficulty))
-        .then(goToPage(leaderboard))
+        
+        setTimeout(goToPage(leaderboard), 3000)
     })
 
     function rightAnswer() {
@@ -361,6 +364,7 @@ document.addEventListener("DOMContentLoaded", ()=> {
     }
    
     function goToPage(pageName){
+        console.log(`goToPage ${pageName.id}`)
         pages.forEach(page => {page.style.display = 'none'})
         pageName.style.display = 'block';
     }
@@ -415,6 +419,7 @@ document.addEventListener("DOMContentLoaded", ()=> {
     }
 
     function getAllGames(){
+        console.log('getAllGames')
         return fetch(`${URL_PREFIX}/games`)
         .then(res => res.json())
     }
@@ -422,16 +427,22 @@ document.addEventListener("DOMContentLoaded", ()=> {
     function getTopTen(difficulty){
         getAllGames()
         .then(json => {
-            let gameArray = json.filter((game) => checkDifficulty(game, game.difficulty))
+            console.log('getTopTen')
+            let gameArray = json.filter((game) => checkDifficulty(game, difficulty));
+            gameArray.push(currentGame);
             gameArray.sort((a, b) => parseInt(b.score) - parseInt(a.score));
+            
             let topTen = gameArray.slice(0, 10);
             displayLeaderBoard(topTen);
         })
+        
     }
 
 
     function displayLeaderBoard(topTen){
-        
+        console.log('displayLeaderBoard')
+        let lbDifficulty = document.querySelector('#lb-difficulty');
+        lbDifficulty.innerText = currentGame.difficulty;
         let ol = document.querySelector('#top-ten');
         ol.innerHTML = ``;
 

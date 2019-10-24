@@ -84,6 +84,7 @@ html {
     min-height: 30px;
     display: flex;
     flex-wrap: wrap;
+
 }
 .fa-check {
     color: green;
@@ -147,13 +148,49 @@ html {
     border-radius: 10px;
 }
 
-.prim:disabled {
+button:disabled {
+    background: #74777a;
+}
+
+button#clear{
+    color: white;
+    font-size: 40px;
+    width: 150px;
+    height: 75px;
+    border: 0;
+    margin: 5px;
+    background: #f0da12;
+    border-radius: 10px;
+}
+
+button#undo{
+    color: white;
+    font-size: 40px;
+    width: 150px;
+    height: 75px;
+    border: 0;
+    margin: 5px;
+    background: #f0da12;
+    border-radius: 10px;
+}
+
+button#submit{
+    color: white;
+    font-size: 40px;
+    width: 150px;
+    height: 75px;
+    border: 0;
+    margin: 5px;
+    background: #76f012;
+    border-radius: 10px;
+}
+
+button#submit:disabled{
     background: #74777a;
 }
 
 .prim[data-used='true']{
     background: #5c5e61
-
 }
 
 p#answer-display {
@@ -168,19 +205,25 @@ p#answer-display {
 
 }
 
-.to-menu {
+.to-title-screen {
     font-family: 'retro';
     font-size: 25px;
     font-weight: bold;  
 }
 
-.to-menu:hover {
+.to-title-screen:hover {
     transform: scale(1.2); 
 }
 
 #top-ten {
 	width: 600px;
-	height: auto;
+    height: auto;
+    margin-left:auto; 
+    margin-right:auto;
+    font-family: 'retro';
+    font-size: 25px;
+    font-weight: bold;  
+    background: #f0da12;
 }
 
 .leader-row {
@@ -202,3 +245,6 @@ p#answer-display {
 	position: relative;
 	display: inline-block;
 }
+
+
+
