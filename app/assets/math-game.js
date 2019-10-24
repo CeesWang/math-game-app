@@ -1,5 +1,5 @@
 const URL_PREFIX = 'http://localhost:3000';
-const GAME_DURATION_SEC = 20;
+const GAME_DURATION_SEC = 120;
 
 document.addEventListener("DOMContentLoaded", ()=> {
     const pages = Array.from(document.querySelectorAll('.page'));

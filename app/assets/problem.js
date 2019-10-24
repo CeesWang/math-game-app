@@ -57,11 +57,11 @@ class Problem {
     }
 
     renderProblem(){
-        const target = document.querySelector('#target');
+        const target = document.querySelector('#target-number');
         const primitives = document.querySelector('#primitives');
         primitives.innerHTML = "";
 
-        target.innerText = `Target: ${this.target()}`;
+        target.innerText = `${this.target()}`;
 
         let idCounter = 1;
         this.primArray.forEach((prim) => {
