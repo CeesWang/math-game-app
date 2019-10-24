@@ -1,5 +1,5 @@
 const URL_PREFIX = 'http://localhost:3000';
-const GAME_DURATION_SEC = 60;
+const GAME_DURATION_SEC = 190;
 
 document.addEventListener("DOMContentLoaded", ()=> {
     const pages = Array.from(document.querySelectorAll('.page'));
@@ -193,7 +193,7 @@ document.addEventListener("DOMContentLoaded", ()=> {
         let rightIcon = document.createElement("i");
         rightIcon.classList.add('fas', 'fa-check','fa-2x');
         scoreBoard.appendChild(rightIcon);
-        displayScore();
+        //displayScore();
         currentGame.createProblem();
     }
     function wrongAnswer() {
@@ -202,7 +202,7 @@ document.addEventListener("DOMContentLoaded", ()=> {
         wrongIcon.classList.add('fas', 'fa-times', 'fa-2x');
         wrongIcon.style.color = "red"; 
         scoreBoard.appendChild(wrongIcon);
-        displayScore();
+       // displayScore();
         currentGame.createProblem();
 
     }
@@ -224,7 +224,7 @@ document.addEventListener("DOMContentLoaded", ()=> {
         // let difficulty = event.target.id;
         currentGame = new Game(difficulty);
         console.log(currentGame);
-        displayScore();
+//        displayScore();
         currentGame.createProblem();
         startTimer();
     }
@@ -316,12 +316,14 @@ document.addEventListener("DOMContentLoaded", ()=> {
             timeEle.innerText = convertSecToMin(time);
         }
         else {
-            alert("game is over");
+            //alert
+            overlay.style.display = "block";
+            countdown.innerText = "Times Up"
             clearInterval(gameTimer);
             // show result screen
             // ask user what to do
             currentGame.problemRecord.pop();
-             finishGame()
+            setTimeout(finishGame,2000);
         }
     }
 

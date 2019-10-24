@@ -5,6 +5,16 @@
     url('Haike-Regular.woff') format('woff'), /* Pretty Modern Browsers */
     url('Haike-Regular.ttf')  format('truetype'), /* Safari, Android, iOS */
     url('Haike-Regular.svg#svgFontName') format('svg'); /* Legacy iOS */
+        
+}
+
+@font-face {
+    font-family: 'digital';
+    src: url('clock.eot?#iefix') format('embedded-opentype'), /* IE6-IE8 */
+    url('clock.woff2') format('woff2'), /* Super Modern Browsers */
+    url('clock.woff') format('woff'), /* Pretty Modern Browsers */
+    url('clock.ttf')  format('truetype'), /* Safari, Android, iOS */
+    url('clockg.svg#svgFontName') format('svg'); /* Legacy iOS */
 }
   
 html { 
@@ -15,18 +25,27 @@ html {
     background-size: cover;
   }
 #title {
-    border-style: solid;
-    border-width: 5px;
-    border-color: aqua;
     text-align: center;
-    font-family: 'retro';
-    font-size: 30px;
-
+    font-family: 'Bungee Shade';
+    font-size: 150px;
+    display: inline-block;    
+    color: whitesmoke;
+    text-shadow: 2px 2px 4px goldenrod, 2px 2px 8px whitesmoke;
+    margin-top: 100px;
 }
 
-#answer-display {
-    min-height: 100px;
+
+#target {
+    color: white;
+    font-size: 40px;
+    font-weight: bold;
+    font-family: 'digital';
+    border: 0;
+    margin: 5px;
+    margin-bottom: 20px;
+    display: inline-block;
 }
+
 #menubox {
     border-style: solid;
     border-radius: 20px;
@@ -38,13 +57,21 @@ html {
     margin-top: 100px;
     width: 1100px;
     height: 700px;
-    background: rgba(255,255,255,0.5)
+    background: rgba(1, 14, 46,0.7)
 }
+
+#timer {
+    font-family: 'digital';
+    color:whitesmoke;
+    font-size: 30px;
+}
+
 #new-game {
-    font-family: 'retro';
-    font-size: 25px;
+    font-family: 'digital';
+    font-size: 35px;
     font-weight: bold;  
-    margin-top: 400px;
+    color: whitesmoke;
+    margin: auto;
 }
 #new-game:hover {
     transform: scale(1.2); 
@@ -59,14 +86,16 @@ html {
 }
 
 #countdown {
-    font-size: 400px;
+    font-size: 300px;
+    font-family: 'digital';
     color: whitesmoke;
-    margin-top: 100px;
+    margin-top: 200px;
 }
 
 #select-difficulty {
-    font-family: 'retro';
-    font-size: 25px;
+    font-family: 'digital';
+    color: whitesmoke;
+    font-size: 35px;
     font-weight: bold;  
     margin-top: 250px;
 }
@@ -78,16 +107,23 @@ html {
 #score-board {
     border-style: solid;
     border-width: 5px;
-    border-color: black;
+    border-color: whitesmoke;
     margin-left: 100px;
     margin-right: 100px;
     min-height: 30px;
     display: flex;
     flex-wrap: wrap;
-
 }
+
+#math-container {
+    border-style: solid;
+    border-width: 5px;
+    border-color: whitesmoke;
+    display: inline-block;
+}
+
 .fa-check {
-    color: green;
+    color: #3cb63a;
     margin: 5px;
 }
 
@@ -98,6 +134,7 @@ html {
 .operator {
     width: 100px;
     height: 100px;
+    margin: 5px;
     border:0;
     color: whitesmoke;
     border-radius: 10px;
@@ -140,11 +177,12 @@ html {
 .prim {
     color: white;
     font-size: 40px;
+    font-weight: bold;
     width: 100px;
+    min-height: 100px;
     height: 100px;
     border: 0;
-    margin: 5px;
-    background: #3cb63a;
+    margin: 10px;
     border-radius: 10px;
 }
 
@@ -153,13 +191,14 @@ button:disabled {
 }
 
 button#clear{
-    color: white;
+    color: whitesmoke;
+    font-family: 'digital';
+    font-weight: bold;
     font-size: 40px;
     width: 150px;
     height: 75px;
     border: 0;
-    margin: 5px;
-    background: #f0da12;
+
     border-radius: 10px;
 }
 
@@ -170,14 +209,14 @@ button#undo{
     height: 75px;
     border: 0;
     margin: 5px;
-    background: #f0da12;
     border-radius: 10px;
 }
 
 button#submit{
-    color: white;
+    color: whitesmoke;
+    font-weight: bold;
     font-size: 40px;
-    width: 150px;
+    width: 350px;
     height: 75px;
     border: 0;
     margin: 5px;
@@ -193,20 +232,19 @@ button#submit:disabled{
     background: #5c5e61
 }
 
-p#answer-display {
+#answer-display {
     color: white;
+    min-height: 50px;
     font-size: 40px;
-    padding: 20px;
+    font-family: 'digital';
+    font-weight: bold;
     border: 0;
     margin: 40px;
-    background: #3cb63a;
     border-radius: 10px;
-    font-family: 'system-ui';
-
 }
 
 .to-title-screen {
-    font-family: 'retro';
+    font-family: 'digital';
     font-size: 25px;
     font-weight: bold;  
 }
@@ -220,7 +258,7 @@ p#answer-display {
     height: auto;
     margin-left:auto; 
     margin-right:auto;
-    font-family: 'retro';
+    font-family: 'digital';
     font-size: 25px;
     font-weight: bold;  
     background: #f0da12;

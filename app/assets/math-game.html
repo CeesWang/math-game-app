@@ -13,14 +13,15 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
     <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css?family=Bungee+Shade&display=swap" rel="stylesheet">
     <!--CHECKMARKS <i class="fas fa-check"></i> <i class="fas fa-times"></i> -->
 </head>
 <body>
-    
+ 
         <div id="menubox">
 
             <div class='page' id='title-screen'>
-                <p id="title"> 1234567890 </p>
+                <p id="title">MATH++</p>
                 <p id='new-game'>START GAME</p>
             </div>
             <div class='page' id='select-difficulty' style="display:none;">
@@ -34,31 +35,33 @@
                 <div id="overlay">
                     <div id="countdown">3</div>
                 </div>
-                <h2 id="timer">Time: <span id="time"><span></span></span></h2>
-                <h2 id="target">Target: </h2>
-                <div id="primitives"></div>
-                <div id="operations">
-                    <button class="operator" disabled="" id="+"> <i class="fas fa-plus fa-3x" ></i></button>
-                    <button class="operator" disabled="" id="-"> <i class="fas fa-minus fa-3x"  ></i></button>
-                    <button class="operator" disabled="" id="*"> <i class="fas fa-times fa-3x"  ></i></button>
-                    <button class="operator" disabled="" id="/"> <i class="fas fa-divide fa-3x"  ></i></button> 
-                    <!-- <button class="operator" disabled="">+</button>
-                    <button class="operator" disabled="">-</button>
-                    <button class="operator" disabled="">*</button>
-                    <button class="operator" disabled="">/</button> -->
-                    <button class="paren" id="open">(</button>
-                    <button class="paren" id="close" disabled="">)</button>
+                <h2 id="timer">Time: <span id="time"><span></h2>
+                <div><p id="target">Target: </p></div>
+                <div id="math-container">
+                    <div id="primitives"></div>
+                    <div id="operations">
+                        <button class="operator" disabled="" id="+"> <i class="fas fa-plus fa-3x" ></i></button>
+                        <button class="operator" disabled="" id="-"> <i class="fas fa-minus fa-3x"  ></i></button>
+                        <button class="operator" disabled="" id="*"> <i class="fas fa-times fa-3x"  ></i></button>
+                        <button class="operator" disabled="" id="/"> <i class="fas fa-divide fa-3x"  ></i></button> 
+                        <!-- <button class="operator" disabled="">+</button>
+                        <button class="operator" disabled="">-</button>
+                        <button class="operator" disabled="">*</button>
+                        <button class="operator" disabled="">/</button> -->
+                        <button class="paren" id="open">(</button>
+                        <button class="paren" id="close" disabled="">)</button>
+                    </div>
+                    <button id="undo"> <i class="fas fa-undo misc" id="undoIcon"></i></button>
+                    <button id="submit" disabled="true">Submit</button>
+                    <button id="clear">Clear</button>
+
                 </div>
+                <br>
                 <p id="answer-display"></p>
-                <button id="undo"> <i class="fas fa-undo misc" id="undoIcon"></i></button>
-                <button id="clear">Clear</button>
-                <button id="submit" disabled="true">Submit</button>
-                <br>
-                <br>
+
                 <div id='scores'>
                     <div class ="flex-container" id='score-board'>
                     </div>
-                    <p id='score-ratio'>0/0</p>
                 </div>
             </div>
             <div class="page" id="results-page" style="display: none">
