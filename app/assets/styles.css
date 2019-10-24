@@ -23,6 +23,10 @@ html {
     font-size: 30px;
 
 }
+
+#answer-display {
+    min-height: 100px;
+}
 #menubox {
     border-style: solid;
     border-radius: 20px;
@@ -61,15 +65,54 @@ html {
     border-style: solid;
     border-width: 5px;
     border-color: black;
+    margin-left: 100px;
+    margin-right: 100px;
+    min-height: 30px;
     display: flex;
     flex-wrap: wrap;
 }
 .fa-check {
     color: green;
-    margin-right: 5px;
+    margin: 5px;
 }
 
 .fa-times {
-    color: red;
-    margin-right: 5px;
+    margin: 5px;
 }
+
+.operator {
+    width: 100px;
+    height: 100px;
+    border:0;
+    color: whitesmoke;
+    border-radius: 10px;
+}
+.operator:active {
+    transform: scale(0.9);
+}
+
+#\-{
+    background: #367ec6;
+}
+
+#\+{
+    background: #e2ba36;
+}
+
+#\*{
+    background: #e98f2d;
+}
+
+#\/{
+    background:#3cb63a;
+}
+
+.prim {
+    width: 150px;
+    height: 150px;
+    border: 0;
+    margin: 5px;
+    background: #367ec6;
+    border-radius: 10px;
+}
+

@@ -56,10 +56,9 @@ class Problem {
     renderProblem(){
         const target = document.querySelector('#target');
         const primitives = document.querySelector('#primitives');
-        const operations = document.querySelector('#operations');
+        primitives.innerHTML = "";
 
         target.innerText = `Target: ${this.target()}`;
-        primitives.innerText = `Primitives: `;
 
         let idCounter = 1;
         this.primArray.forEach((prim) => {
@@ -67,7 +66,7 @@ class Problem {
             button.classList.add('prim');
             button.id = `prim-${idCounter}`;
             button.dataset.used = false;
-            idCounter ++;
+            idCounter++;
             button.innerText = prim;
             primitives.append(button);
         })
@@ -100,7 +99,7 @@ class Problem {
     createProblemResult(){
         let wrongIcon = document.createElement("i");
         wrongIcon.classList.add('fas', 'fa-times', 'fa-2x'); 
-
+        wrongIcon.style.color = "red"; 
         let rightIcon = document.createElement("i");
         rightIcon.classList.add('fas', 'fa-check','fa-2x');
 

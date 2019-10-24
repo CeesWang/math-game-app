@@ -26,34 +26,34 @@ document.addEventListener("DOMContentLoaded", ()=> {
     })
    
     gameBox.addEventListener('click', (event) => {
-        let open = document.querySelector('#open');
-        let close = document.querySelector('#close');
-
-        if ((event.target.tagName == "BUTTON" && !(event.target.id == 'undo')) && !(event.target.id === 'clear')){
-            actionStack.push(event.target);
-        }
-
         if (event.target.className === 'prim'){
-           event.target.dataset.used = 'true';
-           disableAllPrims();
-           enableAllOps();
-           checkForSubmit();
-           enableCloseParenIfOpenParens();
-           answerDisplay.innerText = convertActionStackToString();
+            actionStack.push(event.target);
+            event.target.dataset.used = 'true';
+            disableAllPrims();
+            enableAllOps();
+            checkForSubmit();
+            enableCloseParenIfOpenParens();
+            answerDisplay.innerText = convertActionStackToString();
         }
 
-        if (event.target.className === 'operator'){
-            answerDisplay.innerText = convertActionStackToString();
+        if (event.target.classList[0] === "fas" && event.target.id !== "undoIcon" ) {
+            actionStack.push(event.target.parentNode);
             enableUnusedPrims();
             disableCloseParen();
             disableAllOps();
-        }
-        
-        if (event.target.id == 'undo'){
-            let lastAction = actionStack.pop();
-
             answerDisplay.innerText = convertActionStackToString();
+        }
 
+        if (event.target.className === 'operator'){
+            actionStack.push(event.target);
+            enableUnusedPrims();
+            disableCloseParen();
+            disableAllOps();
+            answerDisplay.innerText = convertActionStackToString();
+        }
+        if (event.target.id === 'undo' || event.target.id === "undoIcon") {
+            let lastAction = actionStack.pop();
+            answerDisplay.innerText = convertActionStackToString();
             if(lastAction.className == 'prim'){
                 lastAction.dataset.used = 'false';
                 enableUnusedPrims();
@@ -96,15 +96,16 @@ document.addEventListener("DOMContentLoaded", ()=> {
         }
 
         if (event.target.id === 'open'){
+            actionStack.push(event.target);
             answerDisplay.innerText = convertActionStackToString();
             openParens++;
-            console.log("event.target.id === 'open'")
             enableUnusedPrims();
             disableAllOps();
             disableCloseParen();
         }
 
-        if (event.target.id === 'close'){            
+        if (event.target.id === 'close'){     
+            actionStack.push(event.target);       
             openParens--;
             answerDisplay.innerText = convertActionStackToString();
             checkForSubmit()
@@ -130,7 +131,7 @@ document.addEventListener("DOMContentLoaded", ()=> {
         }
     }) // end of gamebox eventListener
     
-submitNameform.addEventListener('submit', event => {
+    submitNameform.addEventListener('submit', event => {
         event.preventDefault();
         submitGame(currentGame, event.target.name.value)
         .then(getTopTen(currentGame.difficulty))
@@ -149,7 +150,8 @@ submitNameform.addEventListener('submit', event => {
     function wrongAnswer() {
         (currentGame.lastProblem()).solved = false;
         let wrongIcon = document.createElement("i");
-        wrongIcon.classList.add('fas', 'fa-times', 'fa-2x'); 
+        wrongIcon.classList.add('fas', 'fa-times', 'fa-2x');
+        wrongIcon.style.color = "red"; 
         scoreBoard.appendChild(wrongIcon);
         displayScore();
         currentGame.createProblem();
@@ -251,7 +253,7 @@ submitNameform.addEventListener('submit', event => {
         }
     }
 
-    function startTimer(seconds = 10){
+    function startTimer(seconds = 120){
         let timeEle = document.querySelector('#time');
         timeEle.innerText = `${convertSecToMin(seconds)}`;
         timer = setInterval(decrementTimer, 1000);
@@ -300,7 +302,13 @@ submitNameform.addEventListener('submit', event => {
         let str = '';
         let actionArray = Array.from(actionStack);
         actionArray.forEach(ele => {
-            str += ele.innerText;
+            if (ele.className === "operator") {
+                str += ele.id;
+            }
+            else {
+                str += ele.innerText;
+            }
+
         })
         toggleButtons()
         return str;

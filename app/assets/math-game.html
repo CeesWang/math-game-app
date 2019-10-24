@@ -30,24 +30,29 @@
         <div class="page" id="game-box" style="display: none">
             <h2 id="timer">Time: <span id="time"><span></span></span></h2>
             <h2 id="target">Target: </h2>
-            <div id="primitives">Primitives: </div>
-            <div id="operations">Operations: 
-                <button class="operator" disabled="">+</button>
+            <div id="primitives"></div>
+            <div id="operations">
+                <button class="operator" disabled="" id="+"> <i class="fas fa-plus fa-3x" ></i></button>
+                <button class="operator" disabled="" id="-"> <i class="fas fa-minus fa-3x"  ></i></button>
+                <button class="operator" disabled="" id="*"> <i class="fas fa-times fa-3x"  ></i></button>
+                <button class="operator" disabled="" id="/"> <i class="fas fa-divide fa-3x"  ></i></button> 
+                <!-- <button class="operator" disabled="">+</button>
                 <button class="operator" disabled="">-</button>
                 <button class="operator" disabled="">*</button>
-                <button class="operator" disabled="">/</button>
-                <button class="paren" id="open">(</button><button class="paren" id="close" disabled="">)</button>
+                <button class="operator" disabled="">/</button> -->
+                <button class="paren" id="open">(</button>
+                <button class="paren" id="close" disabled="">)</button>
             </div>
             <p id="answer-display"></p>
-            <button id="undo">↩</button>
+            <button id="undo"> <i class="fas fa-undo" id="undoIcon"></i></button>
             <button id="clear">Clear</button>
             <button id="submit" disabled="true">Submit</button>
             <br>
             <br>
             <div id='scores'>
-                <p id='score-ratio'>0/0</p>
-                <div class ="flex-container" id='score-board'> 
+                <div class ="flex-container" id='score-board'>
                 </div>
+                <p id='score-ratio'>0/0</p>
             </div>
         </div>
         <div class="page" id="results-page" style="display: none">
