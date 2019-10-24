@@ -11,19 +11,36 @@ document.addEventListener("DOMContentLoaded", ()=> {
     const scoreBoard = document.getElementById("score-board");
     const submitNameform = document.getElementById("username-form");
     const leaderboard = document.getElementById("leaderboard");
+    const countdown = document.getElementById("countdown");
+    const navigateMusic = new Audio('menu-navigate.wav');
+    const selectMusic = new Audio('select.wav');
+    const startMusic = new Audio('start.wav');
+    const overlay = document.getElementById("overlay");
+    let gameTimer;
+    let countDownTimer;
     let openParens = 0;
     let actionStack = [];
     let currentGame;
 
     newGameButton.addEventListener('click', e => {
+        startMusic.play();
         goToPage(selectDifficulty);
+        overlay.display = "none";
+    })
+
+    selectDifficulty.addEventListener('mouseover',() =>{
+        navigateMusic.play();
+        
     })
 
     selectDifficulty.addEventListener('click', (event) => {
+        startMusic.play();
         if (event.target.className == 'new-game'){
-            startGame();
+            goToPage(gameBox);
+            countDownTimer = setInterval(countDown.bind(null,event.target.id), 1000);
         }
     })
+
    
     gameBox.addEventListener('click', (event) => {
         if (event.target.className === 'prim'){
@@ -130,6 +147,20 @@ document.addEventListener("DOMContentLoaded", ()=> {
             resetButtons();
         }
     }) // end of gamebox eventListener
+
+    function countDown(difficulty){
+        let time = parseInt(countdown.innerText);
+
+        if (time > 0) {
+            time--;
+            countdown.innerText = time;    
+        }
+        else {
+            clearInterval(countDownTimer);
+            overlay.style.display = "none";
+            startGame(difficulty);
+        }
+    }
     
     submitNameform.addEventListener('submit', event => {
         event.preventDefault();
@@ -171,12 +202,11 @@ document.addEventListener("DOMContentLoaded", ()=> {
         checkForSubmit()
     }
 
-    function startGame() {
-        let difficulty = event.target.id;
+    function startGame(difficulty) {
+        // let difficulty = event.target.id;
         currentGame = new Game(difficulty);
         displayScore();
         currentGame.createProblem();
-        goToPage(gameBox);
         startTimer();
     }
 
@@ -256,7 +286,7 @@ document.addEventListener("DOMContentLoaded", ()=> {
     function startTimer(seconds = 120){
         let timeEle = document.querySelector('#time');
         timeEle.innerText = `${convertSecToMin(seconds)}`;
-        timer = setInterval(decrementTimer, 1000);
+        gameTimer = setInterval(decrementTimer, 1000);
     }
 
     function decrementTimer(){
@@ -268,7 +298,7 @@ document.addEventListener("DOMContentLoaded", ()=> {
         }
         else {
             alert("game is over");
-            clearInterval(timer);
+            clearInterval(gameTimer);
             // show result screen
             // ask user what to do
             currentGame.problemRecord.pop();

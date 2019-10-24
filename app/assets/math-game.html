@@ -16,60 +16,66 @@
     <!--CHECKMARKS <i class="fas fa-check"></i> <i class="fas fa-times"></i> -->
 </head>
 <body>
-    <div id="menubox">
-        <div class='page'>
-            <p id="title"> 1234567890 </p>
-            <p id='new-game'>START GAME</p>
-        </div>
-        <div class='page' id='select-difficulty' style="display:none;">
-            <p class='new-game' id='easy'>Easy</p>
-            <p class='new-game' id='medium'>Medium</p>
-            <p class='new-game' id='hard'>Hard</p>
-            <!-- <button id='back'>↩</button> -->
-        </div>
-        <div class="page" id="game-box" style="display: none">
-            <h2 id="timer">Time: <span id="time"><span></span></span></h2>
-            <h2 id="target">Target: </h2>
-            <div id="primitives"></div>
-            <div id="operations">
-                <button class="operator" disabled="" id="+"> <i class="fas fa-plus fa-3x" ></i></button>
-                <button class="operator" disabled="" id="-"> <i class="fas fa-minus fa-3x"  ></i></button>
-                <button class="operator" disabled="" id="*"> <i class="fas fa-times fa-3x"  ></i></button>
-                <button class="operator" disabled="" id="/"> <i class="fas fa-divide fa-3x"  ></i></button> 
-                <!-- <button class="operator" disabled="">+</button>
-                <button class="operator" disabled="">-</button>
-                <button class="operator" disabled="">*</button>
-                <button class="operator" disabled="">/</button> -->
-                <button class="paren" id="open">(</button>
-                <button class="paren" id="close" disabled="">)</button>
+    
+        <div id="menubox">
+
+            <div class='page'>
+                <p id="title"> 1234567890 </p>
+                <p id='new-game'>START GAME</p>
             </div>
-            <p id="answer-display"></p>
-            <button id="undo"> <i class="fas fa-undo" id="undoIcon"></i></button>
-            <button id="clear">Clear</button>
-            <button id="submit" disabled="true">Submit</button>
-            <br>
-            <br>
-            <div id='scores'>
-                <div class ="flex-container" id='score-board'>
+            <div class='page' id='select-difficulty' style="display:none;">
+                <p class='new-game' id='easy'>Easy</p>
+                <p class='new-game' id='medium'>Medium</p>
+                <p class='new-game' id='hard'>Hard</p>
+                <!-- <button id='back'>↩</button> -->
+            </div>
+            
+            <div class="page" id="game-box" style="display: none">
+                <div id="overlay">
+                    <div id="countdown">3</div>
                 </div>
-                <p id='score-ratio'>0/0</p>
+                <h2 id="timer">Time: <span id="time"><span></span></span></h2>
+                <h2 id="target">Target: </h2>
+                <div id="primitives"></div>
+                <div id="operations">
+                    <button class="operator" disabled="" id="+"> <i class="fas fa-plus fa-3x" ></i></button>
+                    <button class="operator" disabled="" id="-"> <i class="fas fa-minus fa-3x"  ></i></button>
+                    <button class="operator" disabled="" id="*"> <i class="fas fa-times fa-3x"  ></i></button>
+                    <button class="operator" disabled="" id="/"> <i class="fas fa-divide fa-3x"  ></i></button> 
+                    <!-- <button class="operator" disabled="">+</button>
+                    <button class="operator" disabled="">-</button>
+                    <button class="operator" disabled="">*</button>
+                    <button class="operator" disabled="">/</button> -->
+                    <button class="paren" id="open">(</button>
+                    <button class="paren" id="close" disabled="">)</button>
+                </div>
+                <p id="answer-display"></p>
+                <button id="undo"> <i class="fas fa-undo" id="undoIcon"></i></button>
+                <button id="clear">Clear</button>
+                <button id="submit" disabled="true">Submit</button>
+                <br>
+                <br>
+                <div id='scores'>
+                    <div class ="flex-container" id='score-board'>
+                    </div>
+                    <p id='score-ratio'>0/0</p>
+                </div>
+            </div>
+            <div class="page" id="results-page" style="display: none">
+                <h2>Results</h2>
+                <h4 id='results-score'></h4>
+                <h4 id='results-difficulty'></h4>
+                <form id='username-form'>
+                    Enter Name: <input type='text' name='name'>
+                    <input id='submit-name' type='submit'>
+                </form>
+                <div id='record-box'></div>
+            </div>
+            <div class ="page" id="leaderboard" style="display: none">
+                <h2>Leaderboard: </h2>
+                <ol id='top-ten'></ol>
             </div>
         </div>
-        <div class="page" id="results-page" style="display: none">
-            <h2>Results</h2>
-            <h4 id='results-score'></h4>
-            <h4 id='results-difficulty'></h4>
-            <form id='username-form'>
-                Enter Name: <input type='text' name='name'>
-                <input id='submit-name' type='submit'>
-            </form>
-            <div id='record-box'></div>
-        </div>
-        <div class ="page" id="leaderboard" style="display: none">
-            <h2>Leaderboard: </h2>
-            <ol id='top-ten'></ol>
-        </div>
-    </div>
 </body>
 </html>
 
