@@ -1,5 +1,5 @@
 const URL_PREFIX = 'http://localhost:3000';
-const GAME_DURATION_SEC = 20;
+const GAME_DURATION_SEC = 30;
 
 document.addEventListener("DOMContentLoaded", ()=> {
     const pages = Array.from(document.querySelectorAll('.page'));
@@ -465,12 +465,12 @@ document.addEventListener("DOMContentLoaded", ()=> {
             gameArray.sort((a, b) => parseInt(b.score) - parseInt(a.score));
             let topTen = gameArray.slice(0, 10);
             let yourInTheTopTen = topTen.find(game => game === currentGame);
-            yourInTheTopTen == null ? displayLeaderBoard(topTen,false) : displayLeaderBoard(topTen,true); 
+            displayLeaderBoard(topTen); 
         })   
     }
 
 
-    function displayLeaderBoard(topTen, yourIn = false){
+    function displayLeaderBoard(topTen){
         console.log('displayLeaderBoard')
         let lbDifficulty = document.querySelector('#lb-difficulty');
         lbDifficulty.innerText = currentGame.difficulty;
@@ -479,11 +479,10 @@ document.addEventListener("DOMContentLoaded", ()=> {
 
         topTen.forEach(game => {
             let entry = document.createElement('li');
-            if (yourIn) {
+            if (game === currentGame) {
                 entry.innerHTML = `<div class="leader-row you-made-it" style="text-shadow: 2px 2px 4px goldenrod, 2px 2px 8px whitesmoke;">
                 <div class="leader-name">${game.user}</div><div class="leader-score">${game.score}</div>
                  </div>`
-                yourIn = false;
             }
             else {
             entry.innerHTML = `<div class="leader-row">
