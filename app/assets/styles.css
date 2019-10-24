@@ -153,3 +153,38 @@ p#answer-display {
     font-family: 'system-ui';
 
 }
+
+.to-menu {
+    font-family: 'retro';
+    font-size: 25px;
+    font-weight: bold;  
+}
+
+.to-menu:hover {
+    transform: scale(1.2); 
+}
+
+#top-ten {
+	width: 600px;
+	height: auto;
+}
+
+.leader-row {
+	position: relative;
+	display: block;
+	width: 100%;
+	height: 40px;
+	border-bottom: 1px solid #AFAFAF;
+}
+
+.leader-name {
+	position: relative;
+	display: inline-block;
+	width: 75%;
+	line-height: 45px;
+}
+
+.leader-score {
+	position: relative;
+	display: inline-block;
+}

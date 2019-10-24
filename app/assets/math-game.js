@@ -1,8 +1,10 @@
 const URL_PREFIX = 'http://localhost:3000';
+const GAME_DURATION_SEC = 30;
 
 document.addEventListener("DOMContentLoaded", ()=> {
     const pages = Array.from(document.querySelectorAll('.page'));
     const gameBox = document.querySelector('#game-box');
+    const titleScreen = document.querySelector('#title-screen')
     const selectDifficulty = document.querySelector('#select-difficulty');
     const resultsPage = document.querySelector('#results-page')
     const answerDisplay = document.querySelector('#answer-display');
@@ -11,6 +13,7 @@ document.addEventListener("DOMContentLoaded", ()=> {
     const scoreBoard = document.getElementById("score-board");
     const submitNameform = document.getElementById("username-form");
     const leaderboard = document.getElementById("leaderboard");
+    const toMenu = document.getElementsByClassName("to-menu");
     let openParens = 0;
     let actionStack = [];
     let currentGame;
@@ -19,8 +22,20 @@ document.addEventListener("DOMContentLoaded", ()=> {
         goToPage(selectDifficulty);
     })
 
+    document.addEventListener('click', e => {
+        if (e.target.className == 'to-title-screen'){
+            goToPage(titleScreen);
+        }
+    })
+
+
+
     selectDifficulty.addEventListener('click', (event) => {
         if (event.target.className == 'new-game'){
+            openParens = 0;
+            actionStack = [];
+            currentGame = '';
+            scoreBoard.innerHTML = ``;
             startGame();
         }
     })
@@ -174,6 +189,7 @@ document.addEventListener("DOMContentLoaded", ()=> {
     function startGame() {
         let difficulty = event.target.id;
         currentGame = new Game(difficulty);
+        console.log(currentGame);
         displayScore();
         currentGame.createProblem();
         goToPage(gameBox);
@@ -253,7 +269,7 @@ document.addEventListener("DOMContentLoaded", ()=> {
         }
     }
 
-    function startTimer(seconds = 120){
+    function startTimer(seconds = GAME_DURATION_SEC){
         let timeEle = document.querySelector('#time');
         timeEle.innerText = `${convertSecToMin(seconds)}`;
         timer = setInterval(decrementTimer, 1000);
@@ -376,7 +392,6 @@ document.addEventListener("DOMContentLoaded", ()=> {
     function getTopTen(difficulty){
         getAllGames()
         .then(json => {
-            debugger;
             let gameArray = json.filter((game) => checkDifficulty(game, game.difficulty))
             gameArray.sort((a, b) => parseInt(b.score) - parseInt(a.score));
             let topTen = gameArray.slice(0, 10);
@@ -388,10 +403,13 @@ document.addEventListener("DOMContentLoaded", ()=> {
     function displayLeaderBoard(topTen){
         
         let ol = document.querySelector('#top-ten');
+        ol.innerHTML = ``;
 
         topTen.forEach(game => {
             let entry = document.createElement('li');
-            entry.innerText = `${game.user}         Score: ${game.score}`
+            entry.innerHTML = `<div class="leader-row">
+               <div class="leader-name">${game.user}</div><div class="leader-score">${game.score}</div>
+                </div>`
 
             ol.append(entry)
         })

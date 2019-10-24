@@ -15,6 +15,7 @@ class Problem {
         this.difficulty = difficulty;
         this.opsArray = ['+', '-', '*', '/'];
         this.problemStack = []; 
+        this.solved = false;
     }
 
     generatePrimitives(min, max){
