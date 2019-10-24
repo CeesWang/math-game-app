@@ -83,7 +83,7 @@ html {
     width: 100%;
     height: 100%;
     background: rgba(0,0,0,0.8);
-    margin-top: -20px;
+    margin-top: -25px;
 }
 
 #countdown {
@@ -128,8 +128,7 @@ html {
 .fa-check {
     color: #3cb63a;
     margin: 5px;
-}#
-
+}
 .fa-times {
     margin: 5px;
 }
@@ -328,5 +327,4 @@ button#submit:disabled{
 
 #target-number{
     font-size: 75px;
-    text-shadow: 2px 2px 4px goldenrod, 2px 2px 8px whitesmoke;
 }
