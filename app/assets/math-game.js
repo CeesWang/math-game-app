@@ -209,6 +209,7 @@ document.addEventListener("DOMContentLoaded", ()=> {
         correctDing.play();
         let rightIcon = document.createElement("i");
         rightIcon.classList.add('fas', 'fa-check','fa-2x');
+        rightIcon.style.marginLeft = "5px";
         scoreBoard.appendChild(rightIcon);
         //displayScore();
         currentGame.createProblem();
@@ -218,7 +219,8 @@ document.addEventListener("DOMContentLoaded", ()=> {
         wrongBuzzer.play();
         let wrongIcon = document.createElement("i");
         wrongIcon.classList.add('fas', 'fa-times', 'fa-2x');
-        wrongIcon.style.color = "red"; 
+        wrongIcon.style.color = "red";
+        wrongIcon.style.margin = "5px"; 
         scoreBoard.appendChild(wrongIcon);
        // displayScore();
         currentGame.createProblem();
