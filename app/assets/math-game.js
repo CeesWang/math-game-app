@@ -1,5 +1,5 @@
 const URL_PREFIX = 'http://localhost:3000';
-const GAME_DURATION_SEC = 190;
+const GAME_DURATION_SEC = 20;
 
 document.addEventListener("DOMContentLoaded", ()=> {
     const pages = Array.from(document.querySelectorAll('.page'));
@@ -18,6 +18,9 @@ document.addEventListener("DOMContentLoaded", ()=> {
     const navigateMusic = new Audio('menu-navigate.wav');
     const selectMusic = new Audio('select.wav');
     const startMusic = new Audio('start.wav');
+    const wrongBuzzer = new Audio('wrong.wav');
+    const correctDing = new Audio('correct.wav');
+    const timesUp = new Audio('timesUp.wav');
     const overlay = document.getElementById("overlay");
     let gameTimer;
     let countDownTimer;
@@ -45,8 +48,10 @@ document.addEventListener("DOMContentLoaded", ()=> {
 
 
     selectDifficulty.addEventListener('click', (event) => {
+        
         startMusic.play();
         if (event.target.className == 'new-game'){
+            countDown.innerText = '3';
             openParens = 0;
             actionStack = [];
             currentGame = '';
@@ -190,6 +195,7 @@ document.addEventListener("DOMContentLoaded", ()=> {
     function rightAnswer() {
         (currentGame.lastProblem()).solved = true;
         currentGame.score++;
+        correctDing.play();
         let rightIcon = document.createElement("i");
         rightIcon.classList.add('fas', 'fa-check','fa-2x');
         scoreBoard.appendChild(rightIcon);
@@ -198,6 +204,7 @@ document.addEventListener("DOMContentLoaded", ()=> {
     }
     function wrongAnswer() {
         (currentGame.lastProblem()).solved = false;
+        wrongBuzzer.play();
         let wrongIcon = document.createElement("i");
         wrongIcon.classList.add('fas', 'fa-times', 'fa-2x');
         wrongIcon.style.color = "red"; 
@@ -225,6 +232,7 @@ document.addEventListener("DOMContentLoaded", ()=> {
         currentGame = new Game(difficulty);
         console.log(currentGame);
 //        displayScore();
+   
         currentGame.createProblem();
         startTimer();
     }
@@ -317,9 +325,11 @@ document.addEventListener("DOMContentLoaded", ()=> {
         }
         else {
             //alert
+            clearInterval(gameTimer);
             overlay.style.display = "block";
             countdown.innerText = "Times Up"
-            clearInterval(gameTimer);
+            timesUp.play();
+
             // show result screen
             // ask user what to do
             currentGame.problemRecord.pop();
@@ -328,6 +338,7 @@ document.addEventListener("DOMContentLoaded", ()=> {
     }
 
     function finishGame(){
+        countdown.innerText = "3";
         currentGame.displayGameResults();
         goToPage(resultsPage);
     }
