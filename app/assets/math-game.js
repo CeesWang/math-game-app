@@ -114,7 +114,7 @@ document.addEventListener("DOMContentLoaded", ()=> {
 
 
         if (event.target.id == 'submit'){
-            let userAnswer = answerDisplay.innerText;
+            let userAnswer = convertActionStackToString();
             let userAnswerValue = math.evaluate(userAnswer);
 
             (currentGame.lastProblem()).userAnswer = userAnswer;
@@ -308,7 +308,7 @@ document.addEventListener("DOMContentLoaded", ()=> {
             else {
                 str += ele.innerText;
             }
-
+            str += ' '
         })
         toggleButtons()
         return str;

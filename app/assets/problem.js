@@ -35,10 +35,12 @@ class Problem {
 
         this.primArray.forEach((prim) => {
             this.solution += prim;
-            this.solution += this.opsArray[Math.floor(Math.random() * (4))]
+            this.solution += ' ';
+            this.solution += this.opsArray[Math.floor(Math.random() * (4))];
+            this.solution += ' ';
         })
 
-        this.solution = this.solution.slice(0, -1);
+        this.solution = this.solution.slice(0, -2);
         if (!this.validate()) {
             this.generateProblem();
         }
