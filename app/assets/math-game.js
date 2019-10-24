@@ -1,5 +1,5 @@
 const URL_PREFIX = 'http://localhost:3000';
-const GAME_DURATION_SEC = 20;
+const GAME_DURATION_SEC = 10;
 
 document.addEventListener("DOMContentLoaded", ()=> {
     const pages = Array.from(document.querySelectorAll('.page'));
@@ -444,7 +444,6 @@ document.addEventListener("DOMContentLoaded", ()=> {
             let gameArray = json.filter((game) => checkDifficulty(game, difficulty));
             gameArray.push(currentGame);
             gameArray.sort((a, b) => parseInt(b.score) - parseInt(a.score));
-            
             let topTen = gameArray.slice(0, 10);
             displayLeaderBoard(topTen);
         })
@@ -461,7 +460,7 @@ document.addEventListener("DOMContentLoaded", ()=> {
 
         topTen.forEach(game => {
             let entry = document.createElement('li');
-            entry.innerHTML = `<div class="leader-row">
+            entry.innerHTML = `<div class="leader-row w3-animate-bottom">
                <div class="leader-name">${game.user}</div><div class="leader-score">${game.score}</div>
                 </div>`
 

@@ -262,26 +262,43 @@ button#submit:disabled{
     font-family: 'digital';
     font-size: 25px;
     font-weight: bold;  
-    background: #f0da12;
+    color: whitesmoke; 
+}
+
+#leaderboard{
+    font-family: 'digital';
+    color: whitesmoke;
+    font-size: 30px;
+    font-weight: bold;
+}
+.to-title-screen {
+    font-family: 'digital';
+    color: whitesmoke;
+    margin-top: 20px;
 }
 
 .leader-row {
 	position: relative;
 	display: block;
-	width: 100%;
+    width: 100%;
+    margin: 5px;
+    color: whitesmoke;
 	height: 40px;
-	border-bottom: 1px solid #AFAFAF;
+    border-bottom: 1px solid #AFAFAF;
+      
 }
 
 .leader-name {
 	position: relative;
-	display: inline-block;
+    display: inline-block;
+    color: whitesmoke;
 	width: 75%;
 	line-height: 45px;
 }
 
 .leader-score {
-	position: relative;
+    position: relative;
+    color: whitesmoke;
 	display: inline-block;
 }
 
