@@ -1,5 +1,5 @@
 const URL_PREFIX = 'http://localhost:3000';
-const GAME_DURATION_SEC = 10;
+const GAME_DURATION_SEC = 20;
 
 document.addEventListener("DOMContentLoaded", ()=> {
     const pages = Array.from(document.querySelectorAll('.page'));
@@ -27,6 +27,7 @@ document.addEventListener("DOMContentLoaded", ()=> {
     let openParens = 0;
     let actionStack = [];
     let currentGame;
+
 
     newGameButton.addEventListener('click', e => {
         startMusic.play();

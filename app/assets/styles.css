@@ -302,5 +302,15 @@ button#submit:disabled{
 	display: inline-block;
 }
 
+#results-page {
+    font-family: 'digital';
+    color: whitesmoke;
+    font-weight: bold;
+    font-size: 20px;
+}
 
-
+#record-box {
+    margin-top: 20px;
+    overflow-y: scroll;
+    height: 400px;
+}
