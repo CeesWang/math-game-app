@@ -59,7 +59,10 @@ document.addEventListener("DOMContentLoaded", ()=> {
 
 
     selectDifficulty.addEventListener('click', (event) => {
-        
+        let primitives = document.querySelector('#primitives');
+        primitives.innerHTML = '';
+        let targetNumber = document.querySelector('#target-number');
+        targetNumber.innerText = '';
         startMusic.play();
         if (event.target.className == 'new-game'){
             countDown.innerText = '3';
