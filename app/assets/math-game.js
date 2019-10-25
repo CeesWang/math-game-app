@@ -416,6 +416,7 @@ document.addEventListener("DOMContentLoaded", ()=> {
     function startGame(difficulty) {
         // let difficulty = event.target.id;
         currentGame = new Game(difficulty);
+        answerDisplay.innerText = '';
         console.log(currentGame);
 //        displayScore();
    
@@ -536,6 +537,7 @@ document.addEventListener("DOMContentLoaded", ()=> {
         countdown.innerText = "3";
         let targetNumber = document.querySelector('#target-number');
         let primitives = document.querySelector('#primitives');
+        answerDisplay.innerText = '';
         primitives.innerHTML = "";
         targetNumber.innerText = "";
         currentGame.displayGameResults();
