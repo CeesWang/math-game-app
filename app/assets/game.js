@@ -5,7 +5,6 @@ class Game {
         this.user = user;
         this.problemRecord = [];
         this.score = 0;
-        
     }
 
     createProblem(){

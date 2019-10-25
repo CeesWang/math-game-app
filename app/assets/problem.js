@@ -69,6 +69,7 @@ class Problem {
             button.classList.add('prim');
             button.id = `prim-${idCounter}`;
             button.dataset.used = false;
+            button.dataset.value = prim;
             idCounter++;
             button.innerText = prim;
             primitives.append(button);

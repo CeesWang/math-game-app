@@ -1,5 +1,5 @@
 const URL_PREFIX = 'http://localhost:3000';
-const GAME_DURATION_SEC = 30;
+const GAME_DURATION_SEC = 324524240;
 
 document.addEventListener("DOMContentLoaded", ()=> {
     const pages = Array.from(document.querySelectorAll('.page'));
@@ -67,7 +67,127 @@ document.addEventListener("DOMContentLoaded", ()=> {
         }
     })
 
-   
+    document.addEventListener('keypress', (event) =>{
+        console.log(event.keyCode);
+        let button = convertKeypressToButton(event.keyCode);
+        if (button.className === 'prim'){
+            beep.play();
+            actionStack.push(button);
+            button.dataset.used = 'true';
+            disableAllPrims();
+            enableAllOps();
+            checkForSubmit();
+            enableCloseParenIfOpenParens();
+            answerDisplay.innerText = convertActionStackToString();
+        }
+
+        if (button.classList[0] === "fas" && button.id !== "undoIcon" ) {
+            beep.play();
+            actionStack.push(button.parentNode);
+            enableUnusedPrims();
+            disableCloseParen();
+            disableAllOps();
+            answerDisplay.innerText = convertActionStackToString();
+        }
+
+        if (button.className === 'operator'){
+            beep.play();
+            actionStack.push(button);
+            enableUnusedPrims();
+            disableCloseParen();
+            disableAllOps();
+            answerDisplay.innerText = convertActionStackToString();
+        }
+        if (button.id === 'undo' || button.id === "undoIcon") {
+            beep.play();
+            let lastAction = actionStack.pop();
+            answerDisplay.innerText = convertActionStackToString();
+            if(lastAction.className == 'prim'){
+                lastAction.dataset.used = 'false';
+                enableUnusedPrims();
+                disableAllOps();
+                checkForSubmit();
+            } else if (lastAction.className == 'operator'){
+                disableAllPrims();
+                enableAllOps();
+                checkForSubmit();
+            } else if (lastAction.id == 'open'){
+                openParens--;
+                enableCloseParenIfOpenParens();
+            } else if (lastAction.id == 'close'){
+                openParens++;
+                enableCloseParenIfOpenParens();
+            }
+
+            if(actionStack.length == 0){
+                resetButtons();
+            } else if (actionStack[actionStack.length - 1].className == 'prim'){
+                disableAllPrims();
+                enableAllOps();
+                enableCloseParenIfOpenParens();
+                checkForSubmit();
+             } else if (actionStack[actionStack.length - 1].className == 'operator'){
+                enableUnusedPrims();
+                disableAllOps();
+            } else if (actionStack[actionStack.length - 1].id == 'open'){
+                enableUnusedPrims();
+                disableAllOps();
+                disableCloseParen();
+            } else if (actionStack[actionStack.length - 1].id == 'close'){
+                checkForSubmit()
+                enableCloseParenIfOpenParens();
+            }
+         }
+
+        if (button.id === 'clear'){
+            beep.play();
+            resetButtons();
+        }
+
+        if (button.id === 'open'){
+            beep.play();
+            actionStack.push(button);
+            answerDisplay.innerText = convertActionStackToString();
+            openParens++;
+            enableUnusedPrims();
+            disableAllOps();
+            disableCloseParen();
+        }
+
+        if (button.id === 'close'){
+            beep.play();     
+            actionStack.push(button);       
+            openParens--;
+            answerDisplay.innerText = convertActionStackToString();
+            checkForSubmit()
+            enableCloseParenIfOpenParens();
+        }
+
+
+        if (button.id == 'submit'){
+            let userAnswer = convertActionStackToString();
+            let userAnswerValue = math.evaluate(userAnswer);
+
+            (currentGame.lastProblem()).userAnswer = userAnswer;
+            (currentGame.lastProblem()).userAnswerValue = userAnswerValue;
+
+            if (userAnswerValue == (currentGame.lastProblem()).target()){
+                console.log(`${userAnswer} is Correct!`);
+                rightAnswer();
+            } else {
+                console.log(`${userAnswer} is Incorrect!`);
+                wrongAnswer();
+            }
+            resetButtons();
+        }
+    })
+
+    //undo
+   // document.addEventListener('keydown', (event) =>{
+        // console.log(event.keyCode);
+        // let button = convertKeypressToButton(event.keyCode);
+   // })
+
     gameBox.addEventListener('click', (event) => {
         if (event.target.className === 'prim'){
             beep.play();
@@ -525,6 +645,80 @@ document.addEventListener("DOMContentLoaded", ()=> {
     //     .then(res => res.json())
 
     // }
+function convertKeypressToButton(keycode) {
+    let [one,two,three,four,five,six,seven,eight,nine] = [49,50,51,52,53,54,55,56,57];
+    // debugger;
+    let multiplication = 42;
+    let minus = 45; 
+    let division = 47;
+    let plus = 43;
+    let submit = 13;
+    let openParen = 40;
+    let closeParen = 41;
+    let clear = 99;
+    let multiplicationButton = 42;
+    let minusButton = 45; 
+    let divisionButton = 47;
+    let plusButton = 43;
+    let submitButton = 13;
+    let openParenButton = 40;
+    let closeParenButton = 41;
+    let clearButton = 99;
+    
 
+    let allButtonss = Array.from(document.getElementsByTagName("button"));
+    let targetButton;
+    let activeButtonss = allButtonss.filter(button => button.disabled == false);
 
+    switch (keycode) {
+        case one:
+            return activeButtonss.find(press => press.dataset.value == 1);
+            break;
+        case two:
+            return activeButtonss.find(press => press.dataset.value == 2);            
+            break;
+        case three:
+            return activeButtonss.find(press => press.dataset.value == 3);
+            break;
+        case four:
+            return activeButtonss.find(press => press.dataset.value == 4);
+            break;
+        case five:
+                return activeButtonss.find(press => press.dataset.value == 5);
+            break;            
+        case six:
+                return activeButtonss.find(press => press.dataset.value == 6);
+            break;
+        case seven:
+                return activeButtonss.find(press => press.dataset.value == 7);
+            break;
+        case eight:
+                return activeButtonss.find(press => press.dataset.value == 8);
+            break;
+        case  nine:
+                return activeButtonss.find(press => press.dataset.value == 9);
+            break;
+        case multiplication:
+                return activeButtonss.find(press => press.id == "*");
+            break;
+        case minus:
+                return activeButtonss.find(press => press.id == "-");
+            break;
+        case division:
+                return activeButtonss.find(press => press.id == "/");
+            break;
+        case plus:
+                return activeButtonss.find(press => press.id == "+");
+            break;
+        case submit:
+            break;
+        case openParen:
+            break;
+        case closeParen:
+            break;
+        case clear:
+            break;
+        default: 0; 
+    }
+}
 })// end of DOMContentLoaded
