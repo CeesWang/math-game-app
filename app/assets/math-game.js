@@ -1,5 +1,5 @@
 const URL_PREFIX = 'http://localhost:3000';
-const GAME_DURATION_SEC = 324524240;
+const GAME_DURATION_SEC = 60;
 
 document.addEventListener("DOMContentLoaded", ()=> {
     const pages = Array.from(document.querySelectorAll('.page'));
@@ -30,6 +30,12 @@ document.addEventListener("DOMContentLoaded", ()=> {
     let openParens = 0;
     let actionStack = [];
     let currentGame;
+    let allButtonss;
+    // let activeButtonss = allButtonss.filter(button => button.disabled == false);
+
+
+    const [one,two,three,four,five,six,seven,eight,nine] = [49,50,51,52,53,54,55,56,57];
+    const [multiplication,minus,division,plus,submit,openParen,closeParen,clear] = [42,45,47,43,13,40,41,99];
 
 
     newGameButton.addEventListener('click', e => {
@@ -67,126 +73,170 @@ document.addEventListener("DOMContentLoaded", ()=> {
         }
     })
 
-    document.addEventListener('keypress', (event) =>{
-        console.log(event.keyCode);
-        let button = convertKeypressToButton(event.keyCode);
-        if (button.className === 'prim'){
-            beep.play();
-            actionStack.push(button);
-            button.dataset.used = 'true';
-            disableAllPrims();
-            enableAllOps();
-            checkForSubmit();
-            enableCloseParenIfOpenParens();
-            answerDisplay.innerText = convertActionStackToString();
-        }
-
-        if (button.classList[0] === "fas" && button.id !== "undoIcon" ) {
-            beep.play();
-            actionStack.push(button.parentNode);
-            enableUnusedPrims();
-            disableCloseParen();
-            disableAllOps();
-            answerDisplay.innerText = convertActionStackToString();
-        }
-
-        if (button.className === 'operator'){
-            beep.play();
-            actionStack.push(button);
-            enableUnusedPrims();
-            disableCloseParen();
-            disableAllOps();
-            answerDisplay.innerText = convertActionStackToString();
-        }
-        if (button.id === 'undo' || button.id === "undoIcon") {
-            beep.play();
-            let lastAction = actionStack.pop();
-            answerDisplay.innerText = convertActionStackToString();
-            if(lastAction.className == 'prim'){
-                lastAction.dataset.used = 'false';
-                enableUnusedPrims();
-                disableAllOps();
-                checkForSubmit();
-            } else if (lastAction.className == 'operator'){
-                disableAllPrims();
-                enableAllOps();
-                checkForSubmit();
-            } else if (lastAction.id == 'open'){
-                openParens--;
-                enableCloseParenIfOpenParens();
-            } else if (lastAction.id == 'close'){
-                openParens++;
-                enableCloseParenIfOpenParens();
-            }
-
-            if(actionStack.length == 0){
-                resetButtons();
-            } else if (actionStack[actionStack.length - 1].className == 'prim'){
-                disableAllPrims();
-                enableAllOps();
-                enableCloseParenIfOpenParens();
-                checkForSubmit();
-             } else if (actionStack[actionStack.length - 1].className == 'operator'){
-                enableUnusedPrims();
-                disableAllOps();
-            } else if (actionStack[actionStack.length - 1].id == 'open'){
-                enableUnusedPrims();
-                disableAllOps();
-                disableCloseParen();
-            } else if (actionStack[actionStack.length - 1].id == 'close'){
-                checkForSubmit()
-                enableCloseParenIfOpenParens();
-            }
-         }
-
-        if (button.id === 'clear'){
-            beep.play();
-            resetButtons();
-        }
-
-        if (button.id === 'open'){
-            beep.play();
-            actionStack.push(button);
-            answerDisplay.innerText = convertActionStackToString();
-            openParens++;
-            enableUnusedPrims();
-            disableAllOps();
-            disableCloseParen();
-        }
-
-        if (button.id === 'close'){
-            beep.play();     
-            actionStack.push(button);       
-            openParens--;
-            answerDisplay.innerText = convertActionStackToString();
-            checkForSubmit()
-            enableCloseParenIfOpenParens();
-        }
-
-
-        if (button.id == 'submit'){
-            let userAnswer = convertActionStackToString();
-            let userAnswerValue = math.evaluate(userAnswer);
-
-            (currentGame.lastProblem()).userAnswer = userAnswer;
-            (currentGame.lastProblem()).userAnswerValue = userAnswerValue;
-
-            if (userAnswerValue == (currentGame.lastProblem()).target()){
-                console.log(`${userAnswer} is Correct!`);
-                rightAnswer();
-            } else {
-                console.log(`${userAnswer} is Incorrect!`);
-                wrongAnswer();
-            }
-            resetButtons();
+    document.addEventListener('keydown', event => {
+        if (event.keyCode == 8){
+            backspace();
         }
     })
 
-    //undo
-   // document.addEventListener('keydown', (event) =>{
-        // console.log(event.keyCode);
-        // let button = convertKeypressToButton(event.keyCode);
-   // })
+    document.addEventListener('keypress', (event) =>{
+        console.log(event.keyCode);
+        let button = convertKeypressToButton(event.keyCode);
+        if (button != undefined){
+            if (button.className === 'prim'){
+                beep.play();
+                actionStack.push(button);
+                button.dataset.used = 'true';
+                disableAllPrims();
+                enableAllOps();
+                checkForSubmit();
+                enableCloseParenIfOpenParens();
+                answerDisplay.innerText = convertActionStackToString();
+            }
+
+            if (button.classList[0] === "fas" && button.id !== "undoIcon" ) {
+                beep.play();
+                actionStack.push(button.parentNode);
+                enableUnusedPrims();
+                disableCloseParen();
+                disableAllOps();
+                answerDisplay.innerText = convertActionStackToString();
+            }
+
+            if (button.className === 'operator'){
+                beep.play();
+                actionStack.push(button);
+                enableUnusedPrims();
+                disableCloseParen();
+                disableAllOps();
+                answerDisplay.innerText = convertActionStackToString();
+            }
+            if (button.id === 'undo' || button.id === "undoIcon") {
+                beep.play();
+                let lastAction = actionStack.pop();
+                answerDisplay.innerText = convertActionStackToString();
+                if(lastAction.className == 'prim'){
+                    lastAction.dataset.used = 'false';
+                    enableUnusedPrims();
+                    disableAllOps();
+                    checkForSubmit();
+                } else if (lastAction.className == 'operator'){
+                    disableAllPrims();
+                    enableAllOps();
+                    checkForSubmit();
+                } else if (lastAction.id == 'open'){
+                    openParens--;
+                    enableCloseParenIfOpenParens();
+                } else if (lastAction.id == 'close'){
+                    openParens++;
+                    enableCloseParenIfOpenParens();
+                }
+
+                if(actionStack.length == 0){
+                    resetButtons();
+                } else if (actionStack[actionStack.length - 1].className == 'prim'){
+                    disableAllPrims();
+                    enableAllOps();
+                    enableCloseParenIfOpenParens();
+                    checkForSubmit();
+                } else if (actionStack[actionStack.length - 1].className == 'operator'){
+                    enableUnusedPrims();
+                    disableAllOps();
+                } else if (actionStack[actionStack.length - 1].id == 'open'){
+                    enableUnusedPrims();
+                    disableAllOps();
+                    disableCloseParen();
+                } else if (actionStack[actionStack.length - 1].id == 'close'){
+                    checkForSubmit()
+                    enableCloseParenIfOpenParens();
+                }}
+            
+
+            if (button.id === 'clear'){
+                beep.play();
+                resetButtons();
+            }
+
+            if (button.id === 'open'){
+                beep.play();
+                actionStack.push(button);
+                answerDisplay.innerText = convertActionStackToString();
+                openParens++;
+                enableUnusedPrims();
+                disableAllOps();
+                disableCloseParen();
+            }
+
+            if (button.id === 'close'){
+                beep.play();     
+                actionStack.push(button);       
+                openParens--;
+                answerDisplay.innerText = convertActionStackToString();
+                checkForSubmit()
+                enableCloseParenIfOpenParens();
+            }
+
+
+            if (button.id == 'submit'){
+                let userAnswer = convertActionStackToString();
+                let userAnswerValue = math.evaluate(userAnswer);
+
+                (currentGame.lastProblem()).userAnswer = userAnswer;
+                (currentGame.lastProblem()).userAnswerValue = userAnswerValue;
+
+                if (userAnswerValue == (currentGame.lastProblem()).target()){
+                    console.log(`${userAnswer} is Correct!`);
+                    rightAnswer();
+                } else {
+                    console.log(`${userAnswer} is Incorrect!`);
+                    wrongAnswer();
+                }
+                resetButtons();
+            }
+        }
+    })
+
+   function backspace(){
+    beep.play();
+    let lastAction = actionStack.pop();
+    answerDisplay.innerText = convertActionStackToString();
+    if(lastAction.className == 'prim'){
+        lastAction.dataset.used = 'false';
+        enableUnusedPrims();
+        disableAllOps();
+        checkForSubmit();
+    } else if (lastAction.className == 'operator'){
+        disableAllPrims();
+        enableAllOps();
+        checkForSubmit();
+    } else if (lastAction.id == 'open'){
+        openParens--;
+        enableCloseParenIfOpenParens();
+    } else if (lastAction.id == 'close'){
+        openParens++;
+        enableCloseParenIfOpenParens();
+    }
+
+    if(actionStack.length == 0){
+        resetButtons();
+    } else if (actionStack[actionStack.length - 1].className == 'prim'){
+        disableAllPrims();
+        enableAllOps();
+        enableCloseParenIfOpenParens();
+        checkForSubmit();
+     } else if (actionStack[actionStack.length - 1].className == 'operator'){
+        enableUnusedPrims();
+        disableAllOps();
+    } else if (actionStack[actionStack.length - 1].id == 'open'){
+        enableUnusedPrims();
+        disableAllOps();
+        disableCloseParen();
+    } else if (actionStack[actionStack.length - 1].id == 'close'){
+        checkForSubmit()
+        enableCloseParenIfOpenParens();
+    }
+
+   }
 
     gameBox.addEventListener('click', (event) => {
         if (event.target.className === 'prim'){
@@ -256,6 +306,7 @@ document.addEventListener("DOMContentLoaded", ()=> {
                 checkForSubmit()
                 enableCloseParenIfOpenParens();
             }
+            checkforSubmit()
          }
 
         if (event.target.id === 'clear'){
@@ -334,6 +385,7 @@ document.addEventListener("DOMContentLoaded", ()=> {
         scoreBoard.appendChild(rightIcon);
         //displayScore();
         currentGame.createProblem();
+        allButtonss = Array.from(document.getElementsByTagName("button"));
     }
     function wrongAnswer() {
         (currentGame.lastProblem()).solved = false;
@@ -345,7 +397,7 @@ document.addEventListener("DOMContentLoaded", ()=> {
         scoreBoard.appendChild(wrongIcon);
        // displayScore();
         currentGame.createProblem();
-
+        allButtonss = Array.from(document.getElementsByTagName("button"));
     }
 
     function resetButtons(){
@@ -364,10 +416,12 @@ document.addEventListener("DOMContentLoaded", ()=> {
     function startGame(difficulty) {
         // let difficulty = event.target.id;
         currentGame = new Game(difficulty);
+        answerDisplay.innerText = '';
         console.log(currentGame);
 //        displayScore();
    
         currentGame.createProblem();
+        allButtonss = Array.from(document.getElementsByTagName("button"));
         startTimer();
     }
 
@@ -436,7 +490,9 @@ document.addEventListener("DOMContentLoaded", ()=> {
             disableAllOps();
             disableOpenParen();
             if (openParens == 0){
-              submitButton.disabled = false;           
+              submitButton.disabled = false;      
+            } else {
+                submitButton.disabled = true;
             }
         } else {
             enableOpenParen();
@@ -481,6 +537,7 @@ document.addEventListener("DOMContentLoaded", ()=> {
         countdown.innerText = "3";
         let targetNumber = document.querySelector('#target-number');
         let primitives = document.querySelector('#primitives');
+        answerDisplay.innerText = '';
         primitives.innerHTML = "";
         targetNumber.innerText = "";
         currentGame.displayGameResults();
@@ -646,27 +703,27 @@ document.addEventListener("DOMContentLoaded", ()=> {
 
     // }
 function convertKeypressToButton(keycode) {
-    let [one,two,three,four,five,six,seven,eight,nine] = [49,50,51,52,53,54,55,56,57];
-    // debugger;
-    let multiplication = 42;
-    let minus = 45; 
-    let division = 47;
-    let plus = 43;
-    let submit = 13;
-    let openParen = 40;
-    let closeParen = 41;
-    let clear = 99;
-    let multiplicationButton = 42;
-    let minusButton = 45; 
-    let divisionButton = 47;
-    let plusButton = 43;
-    let submitButton = 13;
-    let openParenButton = 40;
-    let closeParenButton = 41;
-    let clearButton = 99;
+    // let [one,two,three,four,five,six,seven,eight,nine] = [49,50,51,52,53,54,55,56,57];
+    // // debugger;
+    // let multiplication = 42;
+    // let minus = 45; 
+    // let division = 47;
+    // let plus = 43;
+    // let submit = 13;
+    // let openParen = 40;
+    // let closeParen = 41;
+    // let clear = 99;
+    // let multiplicationButton = 42;
+    // let minusButton = 45; 
+    // let divisionButton = 47;
+    // let plusButton = 43;
+    // let submitButton = 13;
+    // let openParenButton = 40;
+    // let closeParenButton = 41;
+    // let clearButton = 99;
     
 
-    let allButtonss = Array.from(document.getElementsByTagName("button"));
+    // let allButtonss = Array.from(document.getElementsByTagName("button"));
     let targetButton;
     let activeButtonss = allButtonss.filter(button => button.disabled == false);
 
@@ -711,12 +768,16 @@ function convertKeypressToButton(keycode) {
                 return activeButtonss.find(press => press.id == "+");
             break;
         case submit:
+                return activeButtonss.find(press => press.id == "submit");
             break;
         case openParen:
+                return activeButtonss.find(press => press.id == "open");
             break;
         case closeParen:
+                return activeButtonss.find(press => press.id == "close");
             break;
         case clear:
+                return activeButtonss.find(press => press.id == "clear");
             break;
         default: 0; 
     }
