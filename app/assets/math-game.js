@@ -24,6 +24,7 @@ document.addEventListener("DOMContentLoaded", ()=> {
     const overlay = document.getElementById("overlay");
     const beep = new Audio('buttonBeep.wav');
     const themeSong = new Audio('themeSong.wav');
+    const hooray = new Audio('hooray.wav');
     let gameTimer;
     let countDownTimer;
     let openParens = 0;
@@ -358,6 +359,10 @@ document.addEventListener("DOMContentLoaded", ()=> {
 
     function finishGame(){
         countdown.innerText = "3";
+        let targetNumber = document.querySelector('#target-number');
+        let primitives = document.querySelector('#primitives');
+        primitives.innerHTML = "";
+        targetNumber.innerText = "";
         currentGame.displayGameResults();
         goToPage(resultsPage);
     }
@@ -480,6 +485,7 @@ document.addEventListener("DOMContentLoaded", ()=> {
         topTen.forEach(game => {
             let entry = document.createElement('li');
             if (game === currentGame) {
+                hooray.play();
                 entry.innerHTML = `<div class="leader-row you-made-it" style="text-shadow: 2px 2px 4px goldenrod, 2px 2px 8px whitesmoke;">
                 <div class="leader-name">${game.user}</div><div class="leader-score">${game.score}</div>
                  </div>`
