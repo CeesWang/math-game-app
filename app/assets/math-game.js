@@ -358,7 +358,7 @@ document.addEventListener("DOMContentLoaded", ()=> {
     function countDown(difficulty){
         let time = parseInt(countdown.innerText);
 
-        if (time > 0) {
+        if (time > 1) {
             time--;
             countdown.innerText = time;    
         }
