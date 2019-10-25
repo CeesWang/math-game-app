@@ -162,6 +162,17 @@ html {
     background:#3cb63a;
 } */
 
+#submit-name{
+    font-family: digital;
+    font-size: 18px;
+    color: smokewhite;
+    background: rgba(255, 255, 255,0.1);
+    border-color: whitesmoke;
+    height: 28px;
+    border-radius: 5px;
+    color: whitesmoke;
+}
+
 .paren {
     font-size: 40px;
     font-weight: bold;
@@ -172,6 +183,9 @@ html {
     color: whitesmoke;
     border-radius: 10px;
     background:#ac3ab6;
+}
+.paren:active {
+    transform: scale(0.9);
 }
 
 
@@ -189,6 +203,9 @@ html {
     border-radius: 10px;
     background: #3cb63a;
 }
+.prim:active {
+    transform: scale(0.9);
+}
 
 button:disabled {
     background: #74777a;
@@ -205,6 +222,9 @@ button#clear{
     background: rgb(54, 115, 228);
     border-radius: 10px;
 }
+button#clear:active {
+    transform: scale(0.9);
+}
 
 button#undo{
     color: white;
@@ -215,6 +235,9 @@ button#undo{
     border: 0;
     margin: 5px;
     border-radius: 10px;
+}
+button#undo:active {
+    transform: scale(0.9);
 }
 
 button#submit{
@@ -228,6 +251,9 @@ button#submit{
     margin: 5px;
     background: #76f012;
     border-radius: 10px;
+}
+button#submit:active {
+    transform: scale(0.9);
 }
 
 button#submit:disabled{
@@ -327,4 +353,5 @@ button#submit:disabled{
 
 #target-number{
     font-size: 75px;
+    text-shadow: 2px 2px 4px goldenrod, 2px 2px 8px whitesmoke;
 }
