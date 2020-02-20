@@ -13,7 +13,8 @@ A simple math game based on the game 24
 - [x] The game has a timer that will start after some seconds 
 - [x] The game functionality works
 - [x] Implement game sounds
-- [x] Styling    
+- [x] Styling
+- [ ] deploy the website on heroku
 
 ## Gif Walkthrough
 
